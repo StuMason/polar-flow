@@ -22,7 +22,7 @@ from polar_flow.models.recharge import NightlyRecharge
 from polar_flow.models.sleep import SleepData
 from polar_flow.models.user import UserInfo
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __all__ = [
     "Activity",
     "ActivitySamples",

@@ -179,20 +179,6 @@ polar-flow version
 
 ## Development
 
-<<<<<<< HEAD
-**Using pip:**
-```bash
-pip install polar-flow-api
-```
-
-**Using uv:**
-```bash
-uv add polar-flow
-```
-
-**Development:**
-=======
->>>>>>> 9eb8b4e (docs: Update README to reflect actual implementation)
 ```bash
 git clone https://github.com/StuMason/polar-flow.git
 cd polar-flow
