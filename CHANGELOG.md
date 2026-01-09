@@ -24,15 +24,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sleep endpoint with full type safety (`SleepEndpoint`)
   - Get sleep data for specific date
   - List sleep data for multiple days
+- Exercises endpoint with comprehensive functionality (`ExercisesEndpoint`)
+  - List all exercises (last 30 days)
+  - Get detailed exercise data
+  - Get exercise samples (heart rate, speed, cadence, altitude, etc.)
+  - Get heart rate zones
+  - Export to TCX format (Training Center XML)
+  - Export to GPX format (GPS Exchange Format)
 - Pydantic models for sleep data with computed properties
   - Sleep score, duration, efficiency
   - Sleep stages (light, deep, REM)
   - Heart rate and HRV metrics
   - Computed properties: total_sleep_hours, sleep_efficiency, time_in_bed_hours
+- Pydantic models for exercise data with computed properties
+  - Exercise with 20+ fields (duration, distance, calories, HR, training load)
+  - ExerciseSample for sensor data (HR, speed, cadence)
+  - HeartRateZone for zone analysis
+  - Computed properties: duration_seconds, duration_minutes, distance_km, HR metrics
+  - ISO 8601 duration parsing
+- CLI tool (`polar-flow`) with interactive OAuth authentication
+  - `polar-flow auth` - Interactive OAuth flow with local callback server
+  - `polar-flow version` - Show version information
+  - Automatic browser opening for authentication
+  - Token saving to ~/.polar-flow/token
+- Integration tests for real API validation (manually runnable)
+  - Tests for sleep and exercises endpoints
+  - Skipped by default, run with ACCESS_TOKEN env var
+  - python-dotenv support for .env files
 - Comprehensive error handling with typed exceptions
 - Rate limit awareness with header checking
 - Full test coverage (92%) for all components
-- Example script demonstrating OAuth flow and sleep data retrieval
+- Example scripts demonstrating OAuth flow, sleep data, and exercise data retrieval
 
 ### Fixed
 - OAuth token exchange now uses HTTP Basic Auth instead of POST body parameters

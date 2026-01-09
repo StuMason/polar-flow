@@ -56,9 +56,11 @@ class PolarFlow:
         self._client: httpx.AsyncClient | None = None
 
         # Import endpoints here to avoid circular imports
+        from polar_flow.endpoints.exercises import ExercisesEndpoint
         from polar_flow.endpoints.sleep import SleepEndpoint
 
         self.sleep = SleepEndpoint(self)
+        self.exercises = ExercisesEndpoint(self)
 
     async def __aenter__(self) -> "PolarFlow":
         """Enter async context manager.

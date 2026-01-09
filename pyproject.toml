@@ -35,6 +35,7 @@ dev = [
     "pytest-cov>=5.0",
     "ruff>=0.4",
     "mypy>=1.10",
+    "python-dotenv>=1.0",
 ]
 
 [project.scripts]
@@ -101,12 +102,18 @@ disallow_untyped_defs = false
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
-addopts = "-ra -q --cov=polar_flow --cov-report=term-missing --cov-report=xml"
+addopts = "-ra -q --cov=polar_flow --cov-report=term-missing --cov-report=xml --ignore=tests/integration"
+markers = [
+    "integration: Integration tests that hit real API (deselected by default)",
+]
 
 [tool.coverage.run]
 source = ["src/polar_flow"]
 branch = true
-omit = ["tests/*"]
+omit = [
+    "tests/*",
+    "src/polar_flow/cli.py",  # Interactive CLI tool, tested manually
+]
 
 [tool.coverage.report]
 exclude_lines = [

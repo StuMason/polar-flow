@@ -6,54 +6,73 @@
 [![License](https://img.shields.io/pypi/l/polar-flow-api.svg)](https://github.com/StuMason/polar-flow/blob/main/LICENSE)
 [![codecov](https://codecov.io/gh/StuMason/polar-flow/branch/main/graph/badge.svg)](https://codecov.io/gh/StuMason/polar-flow)
 
-**Modern async Python client for Polar AccessLink API**
+Modern async Python client for Polar AccessLink API.
 
-## Why This Exists
+## Why
 
-The existing `polar-accesslink` package is abandoned (v0.0.5, last updated 2020), has no type hints, no async support, uses raw dicts, and is missing most modern API endpoints. This is a complete rewrite with:
+The existing `polar-accesslink` package is abandoned (v0.0.5, last updated 2020). No type hints, no async, raw dicts everywhere. This is a rewrite with:
 
-- **Async-first** with httpx (sync wrapper available)
-- **Fully typed** with Pydantic 2 models and mypy strict mode
-- **Modern Python** 3.11+ with latest syntax
-- **Complete API coverage** including sleep, nightly recharge, activity, exercises
-- **Developer-friendly** with rich error handling and helpful exceptions
-- **Production-ready** with 80%+ test coverage and comprehensive CI/CD
+- Async-first with httpx
+- Full type safety with Pydantic 2 and mypy strict mode
+- Python 3.11+ with modern syntax
+- 90%+ test coverage
 
-## Quick Start
+## Status
+
+**Currently implemented:**
+- OAuth2 authentication
+- Sleep endpoint (get/list sleep data)
+- Exercises endpoint (list/get/samples/zones/export)
+- CLI authentication tool
+
+**Not yet implemented:**
+- Activity, recharge, physical info endpoints
+- CLI data commands
+- Webhooks
+
+## Install
 
 ```bash
 pip install polar-flow-api
 ```
 
+## Quick Start
+
+### 1. Get Access Token
+
+```bash
+# Set your Polar API credentials
+export CLIENT_ID="your_client_id"
+export CLIENT_SECRET="your_client_secret"
+
+# Run interactive OAuth flow
+polar-flow auth
+```
+
+This opens your browser, handles the OAuth callback, and saves the token to `~/.polar-flow/token`.
+
+### 2. Use the Client
+
 ```python
-from polar_flow import PolarFlow
 import asyncio
+from polar_flow import PolarFlow
 
 async def main():
     async with PolarFlow(access_token="your_token") as client:
-        # Get sleep data for the last 7 days
-        sleep_data = await client.sleep.list(days=7)
+        # Get sleep data
+        sleep_data = await client.sleep.list(user_id="self", days=7)
         for night in sleep_data:
-            print(f"{night.date}: {night.sleep_score}/100")
-            print(f"  Sleep: {night.total_sleep_hours:.1f}h")
-            print(f"  HRV: {night.hrv_avg}ms")
+            print(f"{night.date}: {night.sleep_score}/100 ({night.total_sleep_hours:.1f}h)")
+
+        # Get exercises
+        exercises = await client.exercises.list()
+        for ex in exercises:
+            print(f"{ex.start_time}: {ex.sport} - {ex.duration_minutes}min, {ex.calories}cal")
 
 asyncio.run(main())
 ```
 
-## Features
-
-### Complete API Coverage
-
-- **Users** - Registration, info, deletion
-- **Sleep** - Sleep tracking data, sleep-wise scores
-- **Nightly Recharge** - ANS charge, HRV measurements
-- **Daily Activity** - Steps, calories, activity zones
-- **Exercises** - Training sessions, samples, HR zones, TCX/GPX exports
-- **Physical Info** - Height, weight, max HR (transactional API)
-- **Webhooks** - Signature verification for webhook events
-
-### OAuth2 Made Simple
+## OAuth2 Flow
 
 ```python
 from polar_flow.auth import OAuth2Handler
@@ -61,63 +80,106 @@ from polar_flow.auth import OAuth2Handler
 oauth = OAuth2Handler(
     client_id="your_client_id",
     client_secret="your_client_secret",
-    redirect_uri="http://localhost:8000/callback"
+    redirect_uri="http://localhost:8888/callback"
 )
 
-# Step 1: Get authorization URL
+# Get authorization URL
 auth_url = oauth.get_authorization_url()
-# Redirect user to auth_url
+print(f"Visit: {auth_url}")
 
-# Step 2: Exchange code for token
+# After user authorizes, exchange code for token
 token = await oauth.exchange_code(code="authorization_code")
-
-# Step 3: Use with client
-async with PolarFlow(access_token=token.access_token) as client:
-    user = await client.users.me()
+print(f"Access token: {token.access_token}")
 ```
 
-### Type-Safe Models
-
-All responses are Pydantic models with full type hints:
+## Sleep API
 
 ```python
-sleep = await client.sleep.get(date="2026-01-09")
-print(sleep.sleep_score)           # int
-print(sleep.total_sleep_hours)     # float (computed property)
-print(sleep.sleep_efficiency)      # float (computed property)
-print(sleep.hrv_avg)                # float | None
+# Get sleep for specific date
+sleep = await client.sleep.get(user_id="self", date="2026-01-09")
+print(f"Sleep score: {sleep.sleep_score}")
+print(f"Total sleep: {sleep.total_sleep_hours}h")
+print(f"Deep sleep: {sleep.deep_sleep_seconds / 3600:.1f}h")
+print(f"REM sleep: {sleep.rem_sleep_seconds / 3600:.1f}h")
+print(f"HRV average: {sleep.hrv_avg}ms")
+
+# List sleep data for date range
+sleep_list = await client.sleep.list(user_id="self", days=7)
+for night in sleep_list:
+    print(f"{night.date}: score {night.sleep_score}, {night.total_sleep_hours:.1f}h")
 ```
 
-### Rich Error Handling
+## Exercises API
 
 ```python
-from polar_flow.exceptions import RateLimitError, AuthenticationError
+# List exercises (last 30 days)
+exercises = await client.exercises.list()
+for ex in exercises:
+    print(f"{ex.start_time}: {ex.sport}")
+    print(f"  Duration: {ex.duration_minutes} min")
+    print(f"  Calories: {ex.calories}")
+    if ex.distance_km:
+        print(f"  Distance: {ex.distance_km} km")
+    if ex.average_heart_rate:
+        print(f"  Avg HR: {ex.average_heart_rate} bpm")
+
+# Get detailed exercise
+exercise = await client.exercises.get(exercise_id="123")
+
+# Get exercise samples (HR, speed, cadence, altitude)
+samples = await client.exercises.get_samples(exercise_id="123")
+hr_sample = samples.get_sample_by_type("HEARTRATE")
+if hr_sample:
+    print(f"HR values: {hr_sample.values[:10]}")  # First 10 values
+
+# Get heart rate zones
+zones = await client.exercises.get_zones(exercise_id="123")
+for zone in zones.zones:
+    print(f"Zone {zone.index}: {zone.lower_limit}-{zone.upper_limit} bpm, {zone.in_zone_minutes} min")
+
+# Export to TCX/GPX
+tcx_xml = await client.exercises.export_tcx(exercise_id="123")
+gpx_xml = await client.exercises.export_gpx(exercise_id="123")
+```
+
+## Error Handling
+
+```python
+from polar_flow.exceptions import (
+    AuthenticationError,
+    NotFoundError,
+    RateLimitError,
+    ValidationError,
+)
 
 try:
-    data = await client.sleep.list()
-except RateLimitError as e:
-    print(f"Rate limited. Retry after {e.retry_after} seconds")
+    data = await client.sleep.get(user_id="self", date="2026-01-09")
 except AuthenticationError:
     print("Invalid or expired token")
+except NotFoundError:
+    print("No data for this date")
+except RateLimitError as e:
+    print(f"Rate limited. Retry after {e.retry_after} seconds")
+except ValidationError as e:
+    print(f"Invalid request: {e}")
 ```
 
-### CLI Tool
+## CLI Commands
 
 ```bash
-# Authenticate
-polar-flow auth login
+# Authenticate (opens browser)
+polar-flow auth
 
-# Fetch data
-polar-flow sleep --days 7
-polar-flow recharge --today
-polar-flow exercises --limit 10
+# Authenticate with explicit credentials
+polar-flow auth --client-id YOUR_ID --client-secret YOUR_SECRET
 
-# Export
-polar-flow exercises export --format tcx --output ./exports/
+# Show version
+polar-flow version
 ```
 
-## Installation
+## Development
 
+<<<<<<< HEAD
 **Using pip:**
 ```bash
 pip install polar-flow-api
@@ -129,34 +191,25 @@ uv add polar-flow
 ```
 
 **Development:**
+=======
+>>>>>>> 9eb8b4e (docs: Update README to reflect actual implementation)
 ```bash
 git clone https://github.com/StuMason/polar-flow.git
 cd polar-flow
-uv sync --dev
+uv sync --all-extras
+uv run pytest
 ```
 
 ## Requirements
 
 - Python 3.11+
-- Polar AccessLink API credentials ([Get them here](https://admin.polaraccesslink.com))
-
-## Documentation
-
-See the [docs/standards](./docs/standards/) directory for:
-- API reference
-- Code examples
-- Migration guide from `polar-accesslink`
-
-## Contributing
-
-Contributions welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
-## License
-
-MIT - see [LICENSE](./LICENSE)
+- Polar AccessLink API credentials from [admin.polaraccesslink.com](https://admin.polaraccesslink.com)
 
 ## Links
 
 - [Polar AccessLink API Docs](https://www.polar.com/accesslink-api/)
-- [Polar Admin Console](https://admin.polaraccesslink.com)
 - [Issues](https://github.com/StuMason/polar-flow/issues)
+
+## License
+
+MIT

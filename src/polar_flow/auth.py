@@ -14,16 +14,16 @@ class OAuth2Token(BaseModel):
 
     access_token: str = Field(description="Access token for API requests")
     token_type: str = Field(description="Token type (usually 'bearer')")
-    x_user_id: str = Field(description="Polar user ID")
+    x_user_id: int = Field(description="Polar user ID")
 
     @property
     def user_id(self) -> str:
-        """Get the user ID.
+        """Get the user ID as string.
 
         Returns:
-            Polar user ID
+            Polar user ID as string
         """
-        return self.x_user_id
+        return str(self.x_user_id)
 
 
 class OAuth2Handler:
@@ -140,8 +140,6 @@ class OAuth2Handler:
         data = {
             "grant_type": "authorization_code",
             "code": code.strip(),
-            "client_id": self.client_id,
-            "client_secret": self.client_secret,
         }
 
         if self.redirect_uri:
@@ -152,7 +150,11 @@ class OAuth2Handler:
                 response = await client.post(
                     self.TOKEN_URL,
                     data=data,
-                    headers={"Content-Type": "application/x-www-form-urlencoded"},
+                    headers={
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Accept": "application/json;charset=UTF-8",
+                    },
+                    auth=(self.client_id, self.client_secret),  # HTTP Basic Auth
                     timeout=30.0,
                 )
 
