@@ -164,9 +164,9 @@ class PolarFlow:
         try:
             response = await self._client.request(method, path, **kwargs)
         except httpx.TimeoutException as e:
-            raise PolarFlowError(f"Request timeout: {e}") from e
+            raise PolarFlowError(f"Request timeout: {e}", endpoint=path) from e
         except httpx.RequestError as e:
-            raise PolarFlowError(f"Request failed: {e}") from e
+            raise PolarFlowError(f"Request failed: {e}", endpoint=path) from e
 
         logger.debug(
             f"Response: {response.status_code} (rate limit: "
@@ -199,36 +199,76 @@ class PolarFlow:
             AuthenticationError: If 401 Unauthorized
             NotFoundError: If 404 Not Found
             RateLimitError: If 429 Too Many Requests
-            ValidationError: If 422 Unprocessable Entity
+            ValidationError: If 400/422 Bad Request/Unprocessable Entity
             PolarFlowError: For other non-success status codes
         """
-        if response.status_code == 401:
-            raise AuthenticationError("Invalid or expired access token. Please re-authenticate.")
+        path = response.url.path
+        status_code = response.status_code
+        response_body = response.text[:500] if response.text else None
 
-        if response.status_code == 404:
-            raise NotFoundError(f"Resource not found: {response.url.path}")
-
-        if response.status_code == 429:
-            retry_after = int(response.headers.get("Retry-After", 60))
-            raise RateLimitError(
-                f"Rate limit exceeded. Retry after {retry_after} seconds.", retry_after=retry_after
+        if status_code == 401:
+            raise AuthenticationError(
+                "Invalid or expired access token. Please re-authenticate.",
+                endpoint=path,
+                status_code=status_code,
+                response_body=response_body,
             )
 
-        if response.status_code == 422:
+        if status_code == 404:
+            # Add contextual hints for common 404 cases
+            hint = ""
+            if "/sleep/" in path:
+                hint = " (No sleep data for this date, or invalid date format)"
+            elif "/exercises/" in path:
+                hint = " (Exercise not found or access denied)"
+            elif "/activities/" in path:
+                hint = " (No activity data for this date)"
+
+            raise NotFoundError(
+                f"Resource not found: {path}{hint}",
+                endpoint=path,
+                status_code=status_code,
+                response_body=response_body,
+            )
+
+        if status_code == 429:
+            retry_after = int(response.headers.get("Retry-After", 60))
+            raise RateLimitError(
+                f"Rate limit exceeded. Retry after {retry_after} seconds.",
+                retry_after=retry_after,
+                endpoint=path,
+                status_code=status_code,
+                response_body=response_body,
+            )
+
+        if status_code in (400, 422):
+            # Try to parse detailed error message from response
             try:
                 error_data = response.json()
-                error_msg = error_data.get("message", response.text)
+                if isinstance(error_data, dict):
+                    details = error_data.get("detail", error_data.get("message", response.text))
+                else:
+                    details = response.text
             except Exception:
-                error_msg = response.text
-            raise ValidationError(f"Invalid request parameters: {error_msg}")
+                details = response.text
+
+            raise ValidationError(
+                f"Invalid request to {path}: {details}",
+                endpoint=path,
+                status_code=status_code,
+                response_body=response_body,
+            )
 
         if not response.is_success:
             raise PolarFlowError(
-                f"API error {response.status_code}: {response.text or 'Unknown error'}"
+                f"API error {status_code}: {response.text or 'Unknown error'}",
+                endpoint=path,
+                status_code=status_code,
+                response_body=response_body,
             )
 
         # Handle 204 No Content (e.g., successful DELETE operations)
-        if response.status_code == 204:
+        if status_code == 204:
             return {}
 
         # Parse JSON response
@@ -236,7 +276,12 @@ class PolarFlow:
             json_data: dict[str, Any] = response.json()
             return json_data
         except Exception as e:
-            raise PolarFlowError(f"Failed to parse JSON response: {e}") from e
+            raise PolarFlowError(
+                f"Failed to parse JSON response: {e}",
+                endpoint=path,
+                status_code=status_code,
+                response_body=response_body,
+            ) from e
 
     def _check_rate_limit(self, response: httpx.Response) -> None:
         """Check rate limit headers and log warnings if approaching limit.

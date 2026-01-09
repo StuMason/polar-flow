@@ -54,7 +54,12 @@ class SleepEndpoint:
         return await self.client._request("GET", path, response_model=SleepData)
 
     async def list(
-        self, user_id: str, days: int = 7, end_date: str | date | None = None
+        self,
+        user_id: str,
+        *,
+        days: int | None = None,
+        since: str | None = None,
+        end_date: str | date | None = None,
     ) -> list[SleepData]:
         """Get sleep data for multiple days.
 
@@ -63,14 +68,15 @@ class SleepEndpoint:
 
         Args:
             user_id: Polar user ID
-            days: Number of days to fetch (default: 7, max: 30)
+            days: Number of days to fetch (1-30). Defaults to 7.
+            since: Fetch data since this date (YYYY-MM-DD). Alternative to days.
             end_date: End date (inclusive). Defaults to today.
 
         Returns:
             List of sleep data, ordered by date (most recent first)
 
         Raises:
-            ValueError: If days is invalid (< 1 or > 30)
+            ValueError: If both days and since specified, or if since is invalid
             AuthenticationError: If access token is invalid
 
         Example:
@@ -78,10 +84,38 @@ class SleepEndpoint:
             async with PolarFlow(access_token="token") as client:
                 # Get last 7 days of sleep
                 sleep_list = await client.sleep.list(user_id="123", days=7)
+
+                # Get sleep since specific date
+                sleep_list = await client.sleep.list(user_id="123", since="2026-01-01")
+
                 for sleep in sleep_list:
                     print(f"{sleep.date}: {sleep.sleep_score}/100")
             ```
         """
+        if days is not None and since is not None:
+            raise ValueError("Specify either 'days' or 'since', not both")
+
+        if since is not None:
+            try:
+                since_date = date.fromisoformat(since)
+            except ValueError as e:
+                raise ValueError(f"Invalid date format for 'since': {since}. Use YYYY-MM-DD") from e
+
+            end = (
+                date.today()
+                if end_date is None
+                else date.fromisoformat(end_date)
+                if isinstance(end_date, str)
+                else end_date
+            )
+
+            days = (end - since_date).days + 1
+            if days < 1:
+                raise ValueError(f"'since' date {since} is in the future or after end_date")
+
+        if days is None:
+            days = 7  # default
+
         if days < 1 or days > 30:
             raise ValueError("days must be between 1 and 30")
 

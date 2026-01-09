@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-01-09
+
+### Added
+- Enhanced exception context with `endpoint`, `status_code`, and `response_body` attributes for better debugging
+- Added `load_token_from_file()` utility function for convenient token loading from `~/.polar-flow/token`
+- Added `since=` parameter to `sleep.list()` and `recharge.list()` for incremental data syncing
+- Comprehensive documentation site with MkDocs Material
+  - Quick Start guide
+  - Error Handling guide with detailed exception documentation
+  - Advanced Usage patterns for production deployments
+  - Auto-generated API reference from docstrings
+- GitHub Pages deployment for documentation
+
+### Changed
+- Better error messages with contextual hints for 404 errors (sleep/exercise/activity specific)
+- Improved validation error parsing to extract detailed error messages from API responses
+- Updated `sleep.list()` to use keyword-only arguments for better API clarity
+
+### Fixed
+- Request timeout and connection errors now include endpoint context for debugging
+
 ## [1.0.1] - 2026-01-09
 
 ### Fixed

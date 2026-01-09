@@ -1,6 +1,6 @@
 """Modern async Python client for Polar AccessLink API."""
 
-from polar_flow.auth import OAuth2Handler, OAuth2Token
+from polar_flow.auth import OAuth2Handler, OAuth2Token, load_token_from_file
 from polar_flow.client import PolarFlow
 from polar_flow.exceptions import (
     AuthenticationError,
@@ -22,7 +22,7 @@ from polar_flow.models.recharge import NightlyRecharge
 from polar_flow.models.sleep import SleepData
 from polar_flow.models.user import UserInfo
 
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 __all__ = [
     "Activity",
     "ActivitySamples",
@@ -43,4 +43,5 @@ __all__ = [
     "SleepData",
     "UserInfo",
     "ValidationError",
+    "load_token_from_file",
 ]

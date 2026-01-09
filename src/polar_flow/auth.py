@@ -1,6 +1,7 @@
 """OAuth2 authentication handler for Polar AccessLink API."""
 
 import secrets
+from pathlib import Path
 from urllib.parse import urlencode
 
 import httpx
@@ -178,3 +179,37 @@ class OAuth2Handler:
             raise PolarFlowError(f"Token exchange timeout: {e}") from e
         except httpx.RequestError as e:
             raise PolarFlowError(f"Token exchange request failed: {e}") from e
+
+
+def load_token_from_file(path: Path | None = None) -> str:
+    """Load access token from file.
+
+    Args:
+        path: Token file path. Defaults to ~/.polar-flow/token
+
+    Returns:
+        Access token string
+
+    Raises:
+        FileNotFoundError: If token file doesn't exist
+        ValueError: If token file is empty or invalid
+
+    Example:
+        >>> from polar_flow.auth import load_token_from_file
+        >>> token = load_token_from_file()
+        >>> async with PolarFlow(access_token=token) as client:
+        ...     sleep = await client.sleep.list()
+    """
+    if path is None:
+        path = Path.home() / ".polar-flow" / "token"
+
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Token file not found: {path}\nRun 'polar-flow auth' to authenticate first."
+        )
+
+    token = path.read_text().strip()
+    if not token:
+        raise ValueError(f"Token file is empty: {path}")
+
+    return token

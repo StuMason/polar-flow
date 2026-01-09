@@ -1,0 +1,55 @@
+site_name: polar-flow
+site_description: Modern async Python client for Polar AccessLink API
+site_url: https://stumason.github.io/polar-flow/
+repo_url: https://github.com/StuMason/polar-flow
+repo_name: StuMason/polar-flow
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - content.code.copy
+    - search.suggest
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: false
+            show_root_heading: true
+            heading_level: 2
+
+nav:
+  - Home: index.md
+  - Quick Start: quickstart.md
+  - API Reference:
+      - Client: api/client.md
+      - Authentication: api/auth.md
+      - Endpoints:
+          - Sleep: api/endpoints/sleep.md
+          - Exercises: api/endpoints/exercises.md
+          - Activity: api/endpoints/activity.md
+          - Recharge: api/endpoints/recharge.md
+          - Users: api/endpoints/users.md
+          - Physical Info: api/endpoints/physical_info.md
+      - Models: api/models.md
+      - Exceptions: api/exceptions.md
+  - Error Handling: error-handling.md
+  - Advanced Usage: advanced.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
