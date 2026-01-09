@@ -1,9 +1,9 @@
 # polar-flow
 
 [![CI](https://github.com/StuMason/polar-flow/actions/workflows/tests.yml/badge.svg)](https://github.com/StuMason/polar-flow/actions/workflows/tests.yml)
-[![PyPI](https://img.shields.io/pypi/v/polar-flow.svg)](https://pypi.org/project/polar-flow/)
-[![Python Version](https://img.shields.io/pypi/pyversions/polar-flow.svg)](https://pypi.org/project/polar-flow/)
-[![License](https://img.shields.io/pypi/l/polar-flow.svg)](https://github.com/StuMason/polar-flow/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/polar-flow-api.svg)](https://pypi.org/project/polar-flow-api/)
+[![Python Version](https://img.shields.io/pypi/pyversions/polar-flow-api.svg)](https://pypi.org/project/polar-flow-api/)
+[![License](https://img.shields.io/pypi/l/polar-flow-api.svg)](https://github.com/StuMason/polar-flow/blob/main/LICENSE)
 [![codecov](https://codecov.io/gh/StuMason/polar-flow/branch/main/graph/badge.svg)](https://codecov.io/gh/StuMason/polar-flow)
 
 **Modern async Python client for Polar AccessLink API**
@@ -22,7 +22,7 @@ The existing `polar-accesslink` package is abandoned (v0.0.5, last updated 2020)
 ## Quick Start
 
 ```bash
-pip install polar-flow
+pip install polar-flow-api
 ```
 
 ```python
@@ -120,7 +120,7 @@ polar-flow exercises export --format tcx --output ./exports/
 
 **Using pip:**
 ```bash
-pip install polar-flow
+pip install polar-flow-api
 ```
 
 **Using uv:**

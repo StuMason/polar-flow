@@ -43,7 +43,7 @@ jobs:
       contents: write  # Required for creating releases
     environment:
       name: pypi
-      url: https://pypi.org/project/polar-flow/
+      url: https://pypi.org/project/polar-flow-api/
 
     steps:
       - uses: actions/checkout@v6
@@ -68,7 +68,7 @@ jobs:
         continue-on-error: true
         run: |
           VERSION="${{ needs.check-version.outputs.version }}"
-          if uv pip index versions polar-flow | grep -q "^$VERSION$"; then
+          if uv pip index versions polar-flow-api | grep -q "^$VERSION$"; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT
