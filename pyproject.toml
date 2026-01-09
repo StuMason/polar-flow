@@ -1,6 +1,6 @@
 [project]
 name = "polar-flow-api"
-version = "0.1.0a1"
+version = "1.0.0"
 description = "Modern async Python client for Polar AccessLink API"
 readme = "README.md"
 license = { text = "MIT" }

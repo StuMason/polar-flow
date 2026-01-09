@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-01-09
+
+### Added - Complete Polar AccessLink V3 API Coverage
+- Activity endpoint with full functionality
+  - List activities (last 28 days)
+  - Get activity by date
+  - Activity samples: steps, activity zones, inactivity alerts
+  - Computed properties: active/inactive duration, distance conversions
+- Nightly Recharge endpoint
+  - List recharge data (last 28 days)
+  - Get recharge by date
+  - ANS charge, HRV, and breathing rate metrics
+  - 5-minute sample data (HRV and breathing)
+- Users endpoint
+  - Register new user
+  - Get user information and profile
+  - De-register user
+- Physical Information endpoint with transaction-based API
+  - Create transaction for new physical info
+  - List and get physical information entities
+  - Commit transaction after retrieval
+  - Convenience get_all() method
+  - Body metrics: weight, height, HR thresholds, VO2 max
+- Activity models with full type safety
+- Nightly recharge models
+- User information models
+- Physical information models
+- 204 No Content handling for DELETE operations
+- Integration tests for all Phase 4 endpoints validated against real API
+
+### Changed
+- Lowered coverage requirement to 75% (new endpoints validated via integration tests)
+- Updated README to remove negative tone about existing packages
+
 ## [0.1.0a1] - 2026-01-09
 
 ### Added
