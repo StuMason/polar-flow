@@ -387,14 +387,24 @@ class TestRechargeIntegration:
 
 @pytest.mark.integration
 class TestPhysicalInfoIntegration:
-    """Integration tests for physical information endpoint."""
+    """Integration tests for physical information endpoint.
+
+    Note: Physical info endpoint requires actual user ID (not 'self').
+    These tests are skipped unless USER_ID is set in environment.
+    """
 
     @pytest.mark.asyncio
     async def test_physical_info_flow(self, access_token: str) -> None:
         """Test complete physical info transaction flow."""
+        import os
+
+        user_id = os.getenv("USER_ID")
+        if not user_id:
+            pytest.skip("USER_ID not set - physical info requires numeric user ID (not 'self')")
+
         async with PolarFlow(access_token=access_token) as client:
             # Create transaction
-            transaction = await client.physical_info.create_transaction(user_id="self")
+            transaction = await client.physical_info.create_transaction(user_id=user_id)
 
             if not transaction:
                 print("\nNo new physical information available")
@@ -403,14 +413,14 @@ class TestPhysicalInfoIntegration:
             print(f"\nCreated transaction: {transaction.transaction_id}")
 
             # List physical info in transaction
-            info_urls = await client.physical_info.list_physical_info("self", transaction.transaction_id)
+            info_urls = await client.physical_info.list_physical_info(user_id, transaction.transaction_id)
             print(f"Found {len(info_urls)} physical information records")
 
             if info_urls:
                 # Get first physical info
                 physical_info_id = int(info_urls[0].rstrip("/").split("/")[-1])
                 info = await client.physical_info.get_physical_info(
-                    "self", transaction.transaction_id, physical_info_id
+                    user_id, transaction.transaction_id, physical_info_id
                 )
 
                 print(f"Physical info ID {info.id}:")
@@ -428,14 +438,20 @@ class TestPhysicalInfoIntegration:
                 assert info.transaction_id == transaction.transaction_id
 
             # Commit transaction
-            await client.physical_info.commit_transaction("self", transaction.transaction_id)
+            await client.physical_info.commit_transaction(user_id, transaction.transaction_id)
             print(f"Transaction {transaction.transaction_id} committed")
 
     @pytest.mark.asyncio
     async def test_physical_info_get_all(self, access_token: str) -> None:
         """Test convenience get_all method."""
+        import os
+
+        user_id = os.getenv("USER_ID")
+        if not user_id:
+            pytest.skip("USER_ID not set - physical info requires numeric user ID (not 'self')")
+
         async with PolarFlow(access_token=access_token) as client:
-            physical_infos = await client.physical_info.get_all(user_id="self")
+            physical_infos = await client.physical_info.get_all(user_id=user_id)
 
             print(f"\nRetrieved {len(physical_infos)} physical information records")
 
