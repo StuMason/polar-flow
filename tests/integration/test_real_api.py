@@ -305,6 +305,7 @@ class TestActivityIntegration:
     async def test_get_activity_by_date(self, access_token: str) -> None:
         """Test getting activity for a specific date."""
         from datetime import date, timedelta
+
         from polar_flow.exceptions import NotFoundError
 
         async with PolarFlow(access_token=access_token) as client:
@@ -366,6 +367,7 @@ class TestRechargeIntegration:
     async def test_get_recharge_by_date(self, access_token: str) -> None:
         """Test getting recharge for specific date."""
         from datetime import date, timedelta
+
         from polar_flow.exceptions import NotFoundError
 
         async with PolarFlow(access_token=access_token) as client:
