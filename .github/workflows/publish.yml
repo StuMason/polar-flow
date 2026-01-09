@@ -1,0 +1,99 @@
+name: Publish to PyPI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "pyproject.toml"
+
+jobs:
+  check-version:
+    name: Check if version changed
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      version_changed: ${{ steps.check_version.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get current version
+        id: get_version
+        run: |
+          VERSION=$(grep '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if version changed
+        id: check_version
+        run: |
+          if git diff HEAD^ HEAD -- pyproject.toml | grep -q '^+version = '; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+  publish:
+    name: Publish to PyPI
+    needs: check-version
+    if: needs.check-version.outputs.version_changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for trusted publishing
+      contents: write  # Required for creating releases
+    environment:
+      name: pypi
+      url: https://pypi.org/project/polar-flow/
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install 3.11
+
+      - name: Install dependencies
+        run: uv sync --dev
+
+      - name: Run tests
+        run: uv run pytest
+
+      - name: Build package
+        run: uv build
+
+      - name: Check if version exists on PyPI
+        id: check_pypi
+        continue-on-error: true
+        run: |
+          VERSION="${{ needs.check-version.outputs.version }}"
+          if uv pip index versions polar-flow | grep -q "^$VERSION$"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to PyPI
+        if: steps.check_pypi.outputs.exists != 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Extract changelog for version
+        id: extract_changelog
+        if: steps.check_pypi.outputs.exists != 'true'
+        run: |
+          VERSION="${{ needs.check-version.outputs.version }}"
+          # Extract changelog section between version headers
+          CHANGELOG=$(sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' | tail -n +2)
+          # Save to file to preserve newlines
+          echo "$CHANGELOG" > /tmp/changelog.txt
+
+      - name: Create GitHub Release
+        if: steps.check_pypi.outputs.exists != 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.check-version.outputs.version }}
+          name: Release v${{ needs.check-version.outputs.version }}
+          body_path: /tmp/changelog.txt
+          draft: false
+          prerelease: false

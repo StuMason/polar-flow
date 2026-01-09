@@ -1,0 +1,58 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    name: Review with Claude
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+
+    steps:
+      - name: Review PR with Claude Code
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          model: claude-sonnet-4-20250514
+          prompt: |
+            Review this pull request for:
+
+            1. **Type Safety**: All functions must have complete type hints. Check for:
+               - Missing parameter or return type hints
+               - Use of `Any` type (should be avoided)
+               - Proper use of modern syntax (`X | None` not `Optional[X]`)
+
+            2. **Code Quality**:
+               - Proper error handling with typed exceptions
+               - Clear, descriptive variable names
+               - Appropriate docstrings (Google style)
+               - No overly complex functions (consider splitting)
+
+            3. **Testing**:
+               - New features must include tests
+               - Tests follow AAA pattern (Arrange, Act, Assert)
+               - Coverage requirements met (80%+)
+
+            4. **Pydantic Models**:
+               - Proper field descriptions
+               - Validation rules where appropriate
+               - Computed properties for derived values
+
+            5. **Async/Await**:
+               - Proper use of async/await
+               - Using httpx, not requests
+               - Context managers used correctly
+
+            6. **Documentation**:
+               - README updated if adding features
+               - CHANGELOG.md updated
+               - Code examples provided where relevant
+
+            Focus on constructive feedback. Highlight good patterns as well as issues.
+            Be specific about what needs to change and why.
