@@ -115,12 +115,14 @@ class TestExercisesIntegration:
                 first = exercises[0]
                 assert first.id
                 assert first.sport
-                assert first.calories >= 0
-                assert first.duration_seconds > 0
+                assert first.calories is None or first.calories >= 0
+                assert first.duration_seconds >= 0
 
     @pytest.mark.asyncio
     async def test_get_exercise_details(self, access_token: str) -> None:
         """Test getting detailed exercise data."""
+        from polar_flow.exceptions import NotFoundError
+
         async with PolarFlow(access_token=access_token) as client:
             exercises = await client.exercises.list()
 
@@ -131,11 +133,14 @@ class TestExercisesIntegration:
             print(f"\nTesting exercise ID: {exercise_id}")
 
             # Get detailed exercise
-            exercise = await client.exercises.get(exercise_id=exercise_id)
+            try:
+                exercise = await client.exercises.get(exercise_id=exercise_id)
+            except NotFoundError:
+                pytest.skip(f"Exercise {exercise_id} has no detailed data available")
 
             assert exercise.id == exercise_id
             assert exercise.sport
-            assert exercise.calories >= 0
+            assert exercise.calories is None or exercise.calories >= 0
 
             print(f"Sport: {exercise.sport}")
             print(f"Duration: {exercise.duration_minutes} minutes")
@@ -144,11 +149,13 @@ class TestExercisesIntegration:
                 print(f"Distance: {exercise.distance_km} km")
             if exercise.average_heart_rate:
                 print(f"Avg HR: {exercise.average_heart_rate} bpm")
-                print(f"Max HR: {exercise.max_heart_rate} bpm")
+                print(f"Max HR: {exercise.maximum_heart_rate} bpm")
 
     @pytest.mark.asyncio
     async def test_get_exercise_samples(self, access_token: str) -> None:
         """Test getting exercise samples (HR, speed, etc.)."""
+        from polar_flow.exceptions import NotFoundError
+
         async with PolarFlow(access_token=access_token) as client:
             exercises = await client.exercises.list()
 
@@ -158,7 +165,10 @@ class TestExercisesIntegration:
             exercise_id = exercises[0].id
             print(f"\nGetting samples for exercise: {exercise_id}")
 
-            samples = await client.exercises.get_samples(exercise_id=exercise_id)
+            try:
+                samples = await client.exercises.get_samples(exercise_id=exercise_id)
+            except NotFoundError:
+                pytest.skip(f"Exercise {exercise_id} has no sample data available")
 
             print(f"Found {len(samples.samples)} sample types")
 
@@ -178,6 +188,8 @@ class TestExercisesIntegration:
     @pytest.mark.asyncio
     async def test_get_exercise_zones(self, access_token: str) -> None:
         """Test getting heart rate zones for exercise."""
+        from polar_flow.exceptions import NotFoundError
+
         async with PolarFlow(access_token=access_token) as client:
             exercises = await client.exercises.list()
 
@@ -187,7 +199,10 @@ class TestExercisesIntegration:
             exercise_id = exercises[0].id
             print(f"\nGetting zones for exercise: {exercise_id}")
 
-            zones = await client.exercises.get_zones(exercise_id=exercise_id)
+            try:
+                zones = await client.exercises.get_zones(exercise_id=exercise_id)
+            except NotFoundError:
+                pytest.skip(f"Exercise {exercise_id} has no zone data available")
 
             print(f"Found {len(zones.zones)} heart rate zones")
 

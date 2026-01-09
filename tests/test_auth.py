@@ -94,7 +94,7 @@ async def test_exchange_code_success(httpx_mock: HTTPXMock) -> None:
         json={
             "access_token": "test_access_token_12345",
             "token_type": "bearer",
-            "x_user_id": "98765432",
+            "x_user_id": 98765432,
         },
     )
 
@@ -109,8 +109,8 @@ async def test_exchange_code_success(httpx_mock: HTTPXMock) -> None:
     assert isinstance(token, OAuth2Token)
     assert token.access_token == "test_access_token_12345"
     assert token.token_type == "bearer"
-    assert token.x_user_id == "98765432"
-    assert token.user_id == "98765432"  # Property alias
+    assert token.x_user_id == 98765432
+    assert token.user_id == "98765432"  # user_id property returns string
 
 
 @pytest.mark.asyncio
@@ -185,7 +185,7 @@ async def test_exchange_code_sends_correct_request(httpx_mock: HTTPXMock) -> Non
         json={
             "access_token": "token",
             "token_type": "bearer",
-            "x_user_id": "123",
+            "x_user_id": 123,
         },
     )
 
@@ -201,11 +201,16 @@ async def test_exchange_code_sends_correct_request(httpx_mock: HTTPXMock) -> Non
     assert request.method == "POST"
     assert request.url == "https://polarremote.com/v2/oauth2/token"
     assert request.headers["Content-Type"] == "application/x-www-form-urlencoded"
+    assert request.headers["Accept"] == "application/json;charset=UTF-8"
 
-    # Check request body
+    # Check HTTP Basic Auth header (base64 encoded client_id:client_secret)
+    assert "Authorization" in request.headers
+    assert request.headers["Authorization"].startswith("Basic ")
+
+    # Check request body (credentials should NOT be in body, they're in Auth header)
     body = request.content.decode("utf-8")
     assert "grant_type=authorization_code" in body
     assert "code=my_auth_code" in body
-    assert "client_id=my_client_id" in body
-    assert "client_secret=my_client_secret" in body
     assert "redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Fcallback" in body
+    assert "client_id" not in body  # Should be in Authorization header, not body
+    assert "client_secret" not in body  # Should be in Authorization header, not body

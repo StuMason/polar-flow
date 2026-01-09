@@ -42,6 +42,10 @@ class ExercisesEndpoint:
         """
         path = "/v3/exercises"
         response = await self.client._request("GET", path)
+        # API returns array directly, not {"exercises": [...]}
+        if isinstance(response, list):
+            return [Exercise.model_validate(ex) for ex in response]
+        # Fallback for dict response (shouldn't happen but be safe)
         exercises_data = response.get("exercises", [])
         return [Exercise.model_validate(ex) for ex in exercises_data]
 

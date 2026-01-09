@@ -15,8 +15,7 @@ class TestExercisesEndpoint:
         """Test listing all exercises."""
         httpx_mock.add_response(
             url="https://www.polaraccesslink.com/v3/exercises",
-            json={
-                "exercises": [
+            json=[
                     {
                         "id": "123",
                         "upload-time": "2026-01-09T10:00:00Z",
@@ -65,8 +64,7 @@ class TestExercisesEndpoint:
                         "running-index": None,
                         "training-load-pro": None,
                     },
-                ]
-            },
+                ],
         )
 
         async with PolarFlow(access_token="test_token_1234567890") as client:
@@ -83,7 +81,7 @@ class TestExercisesEndpoint:
         """Test listing exercises when none available."""
         httpx_mock.add_response(
             url="https://www.polaraccesslink.com/v3/exercises",
-            json={"exercises": []},
+            json=[],
         )
 
         async with PolarFlow(access_token="test_token_1234567890") as client:

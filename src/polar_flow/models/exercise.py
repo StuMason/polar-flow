@@ -21,13 +21,15 @@ class Exercise(BaseModel):
     )
     polar_user: str = Field(alias="polar-user", description="Polar user ID")
     device: str = Field(description="Device name/identifier")
-    device_id: str = Field(alias="device-id", description="Unique device identifier")
+    device_id: str | None = Field(
+        default=None, alias="device-id", description="Unique device identifier"
+    )
     start_time: dt.datetime = Field(alias="start-time", description="Exercise start time")
     start_time_utc_offset: int = Field(
         alias="start-time-utc-offset", description="UTC offset in minutes"
     )
     duration: str = Field(description="Exercise duration in ISO 8601 format (PT2H30M)")
-    calories: int = Field(description="Total calories burned", ge=0)
+    calories: int | None = Field(default=None, description="Total calories burned", ge=0)
     distance: float | None = Field(default=None, description="Total distance in meters")
     heart_rate: dict[str, int] | None = Field(
         default=None, alias="heart-rate", description="Heart rate statistics (average, maximum)"
@@ -66,10 +68,10 @@ class Exercise(BaseModel):
     running_index: int | None = Field(
         default=None, alias="running-index", description="Running performance index"
     )
-    training_load_pro: dict[str, float] | None = Field(
+    training_load_pro: dict[str, float | str] | None = Field(
         default=None,
         alias="training-load-pro",
-        description="Training Load Pro data (cardio, muscle, perceived)",
+        description="Training Load Pro data (cardio, muscle, perceived). Values can be floats or strings like 'NOT_AVAILABLE'.",
     )
 
     @field_validator("upload_time", "start_time", mode="before")
