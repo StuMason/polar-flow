@@ -11,7 +11,7 @@ from polar_flow.exceptions import (
 )
 from polar_flow.models.sleep import SleepData
 
-__version__ = "0.1.0"
+__version__ = "0.1.0a1"
 __all__ = [
     "AuthenticationError",
     "NotFoundError",

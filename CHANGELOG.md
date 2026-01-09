@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0a1] - 2026-01-09
+
 ### Added
 - Initial project scaffolding with uv and hatchling
 - Custom exception hierarchy (PolarFlowError, AuthenticationError, RateLimitError, NotFoundError, ValidationError)
@@ -18,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation: README, CLAUDE.md, CONTRIBUTING.md
 - 80%+ test coverage requirement
 - Core async HTTP client (`PolarFlow`) with httpx
-- OAuth2 authentication handler (`OAuth2Handler`) for authorization code flow
+- OAuth2 authentication handler (`OAuth2Handler`) for authorization code flow with HTTP Basic Auth
 - Sleep endpoint with full type safety (`SleepEndpoint`)
   - Get sleep data for specific date
   - List sleep data for multiple days
@@ -32,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Full test coverage (92%) for all components
 - Example script demonstrating OAuth flow and sleep data retrieval
 
-## [0.1.0] - TBD
-
-Initial release.
+### Fixed
+- OAuth token exchange now uses HTTP Basic Auth instead of POST body parameters
+- Exercise models handle optional fields (device_id, calories) from real API
+- Exercise models handle string values in training_load_pro (e.g., "NOT_AVAILABLE")
+- Integration tests gracefully skip when data unavailable
