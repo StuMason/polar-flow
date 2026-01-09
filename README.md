@@ -8,13 +8,12 @@
 
 Modern async Python client for Polar AccessLink API.
 
-## Why
-
-The existing `polar-accesslink` package is abandoned (v0.0.5, last updated 2020). No type hints, no async, raw dicts everywhere. This is a rewrite with:
+## Features
 
 - Async-first with httpx
 - Full type safety with Pydantic 2 and mypy strict mode
 - Python 3.11+ with modern syntax
+- Complete V3 API coverage
 - 90%+ test coverage
 
 ## Status
