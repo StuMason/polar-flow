@@ -9,6 +9,7 @@ from polar_flow.exceptions import (
     RateLimitError,
     ValidationError,
 )
+from polar_flow.models.activity import Activity, ActivitySamples
 from polar_flow.models.exercise import (
     Exercise,
     ExerciseSample,
@@ -16,22 +17,30 @@ from polar_flow.models.exercise import (
     ExerciseZones,
     HeartRateZone,
 )
+from polar_flow.models.physical_info import PhysicalInformation
+from polar_flow.models.recharge import NightlyRecharge
 from polar_flow.models.sleep import SleepData
+from polar_flow.models.user import UserInfo
 
 __version__ = "0.1.0a1"
 __all__ = [
+    "Activity",
+    "ActivitySamples",
     "AuthenticationError",
     "Exercise",
     "ExerciseSample",
     "ExerciseSamples",
     "ExerciseZones",
     "HeartRateZone",
+    "NightlyRecharge",
     "NotFoundError",
+    "PhysicalInformation",
     "OAuth2Handler",
     "OAuth2Token",
     "PolarFlow",
     "PolarFlowError",
     "RateLimitError",
     "SleepData",
+    "UserInfo",
     "ValidationError",
 ]

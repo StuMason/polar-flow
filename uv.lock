@@ -361,8 +361,8 @@ wheels = [
 ]
 
 [[package]]
-name = "polar-flow"
-version = "0.1.0"
+name = "polar-flow-api"
+version = "0.1.0a1"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },

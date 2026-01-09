@@ -56,11 +56,19 @@ class PolarFlow:
         self._client: httpx.AsyncClient | None = None
 
         # Import endpoints here to avoid circular imports
+        from polar_flow.endpoints.activity import ActivityEndpoint
         from polar_flow.endpoints.exercises import ExercisesEndpoint
+        from polar_flow.endpoints.physical_info import PhysicalInfoEndpoint
+        from polar_flow.endpoints.recharge import RechargeEndpoint
         from polar_flow.endpoints.sleep import SleepEndpoint
+        from polar_flow.endpoints.users import UsersEndpoint
 
         self.sleep = SleepEndpoint(self)
         self.exercises = ExercisesEndpoint(self)
+        self.activity = ActivityEndpoint(self)
+        self.recharge = RechargeEndpoint(self)
+        self.users = UsersEndpoint(self)
+        self.physical_info = PhysicalInfoEndpoint(self)
 
     async def __aenter__(self) -> "PolarFlow":
         """Enter async context manager.
@@ -218,6 +226,10 @@ class PolarFlow:
             raise PolarFlowError(
                 f"API error {response.status_code}: {response.text or 'Unknown error'}"
             )
+
+        # Handle 204 No Content (e.g., successful DELETE operations)
+        if response.status_code == 204:
+            return {}
 
         # Parse JSON response
         try:
