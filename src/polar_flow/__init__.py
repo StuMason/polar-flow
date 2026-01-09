@@ -9,11 +9,23 @@ from polar_flow.exceptions import (
     RateLimitError,
     ValidationError,
 )
+from polar_flow.models.exercise import (
+    Exercise,
+    ExerciseSample,
+    ExerciseSamples,
+    ExerciseZones,
+    HeartRateZone,
+)
 from polar_flow.models.sleep import SleepData
 
 __version__ = "0.1.0a1"
 __all__ = [
     "AuthenticationError",
+    "Exercise",
+    "ExerciseSample",
+    "ExerciseSamples",
+    "ExerciseZones",
+    "HeartRateZone",
     "NotFoundError",
     "OAuth2Handler",
     "OAuth2Token",
