@@ -1,6 +1,5 @@
 """Tests for custom exceptions."""
 
-
 from polar_flow.exceptions import (
     AuthenticationError,
     NotFoundError,

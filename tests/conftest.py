@@ -6,7 +6,7 @@ import pytest
 @pytest.fixture
 def mock_access_token() -> str:
     """Return a mock access token for testing."""
-    return "mock_access_token_12345"
+    return "mock_access_token_1234567890"
 
 
 @pytest.fixture
