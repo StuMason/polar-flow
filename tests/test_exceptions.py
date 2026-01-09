@@ -1,6 +1,5 @@
 """Tests for custom exceptions."""
 
-import pytest
 
 from polar_flow.exceptions import (
     AuthenticationError,
