@@ -19,14 +19,14 @@ Modern async Python client for Polar AccessLink API.
 ## API Coverage
 
 **Complete Polar AccessLink V3 API implementation:**
-- ✅ OAuth2 authentication with HTTP Basic Auth
-- ✅ Sleep endpoint (get/list sleep data)
-- ✅ Exercises endpoint (list/get/samples/zones/export TCX/GPX)
-- ✅ Activity endpoint (daily activity with steps/zones/inactivity)
-- ✅ Nightly Recharge endpoint (ANS charge, HRV, breathing rate)
-- ✅ Users endpoint (register/get/delete)
-- ✅ Physical Information endpoint (transaction-based body metrics)
-- ✅ CLI authentication tool
+- OAuth2 authentication with HTTP Basic Auth
+- Sleep endpoint (get/list sleep data)
+- Exercises endpoint (list/get/samples/zones/export TCX/GPX)
+- Activity endpoint (daily activity with steps/zones/inactivity)
+- Nightly Recharge endpoint (ANS charge, HRV, breathing rate)
+- Users endpoint (register/get/delete)
+- Physical Information endpoint (transaction-based body metrics)
+- CLI authentication tool
 
 All endpoints tested and validated against real Polar API.
 
