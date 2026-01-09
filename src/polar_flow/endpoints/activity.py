@@ -42,7 +42,9 @@ class ActivityEndpoint:
         response = await self.client._request("GET", path)
         return Activity.model_validate(response)
 
-    async def list(self, from_date: str | None = None, to_date: str | None = None) -> list[Activity]:
+    async def list(
+        self, from_date: str | None = None, to_date: str | None = None
+    ) -> list[Activity]:
         """List activity summaries.
 
         Args:

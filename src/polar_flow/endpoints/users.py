@@ -38,7 +38,9 @@ class UsersEndpoint:
         """
         path = "/v3/users"
         request_data = UserRegistrationRequest(member_id=member_id)
-        response = await self.client._request("POST", path, json=request_data.model_dump(by_alias=True))
+        response = await self.client._request(
+            "POST", path, json=request_data.model_dump(by_alias=True)
+        )
         return UserInfo.model_validate(response)
 
     async def get(self, user_id: int | str) -> UserInfo:

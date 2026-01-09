@@ -48,9 +48,7 @@ class PhysicalInfoEndpoint:
 
         return PhysicalInfoTransaction.model_validate(response)
 
-    async def list_physical_info(
-        self, user_id: int | str, transaction_id: int
-    ) -> list[str]:
+    async def list_physical_info(self, user_id: int | str, transaction_id: int) -> list[str]:
         """List physical information URLs in transaction.
 
         Args:
@@ -123,7 +121,9 @@ class PhysicalInfoEndpoint:
         for url in info_urls:
             # URL format: .../physical-informations/{id}
             physical_info_id = int(url.rstrip("/").split("/")[-1])
-            info = await self.get_physical_info(user_id, transaction.transaction_id, physical_info_id)
+            info = await self.get_physical_info(
+                user_id, transaction.transaction_id, physical_info_id
+            )
             results.append(info)
 
         # Commit transaction

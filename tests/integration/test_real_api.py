@@ -290,7 +290,9 @@ class TestActivityIntegration:
             if activities:
                 first = activities[0]
                 print(f"  {first.start_time.date()}: {first.steps} steps, {first.calories} cal")
-                print(f"  Active: {first.active_duration_minutes}min, Distance: {first.distance_km}km")
+                print(
+                    f"  Active: {first.active_duration_minutes}min, Distance: {first.distance_km}km"
+                )
 
                 # Validate structure
                 assert first.steps >= 0
@@ -319,8 +321,10 @@ class TestActivityIntegration:
 
                 # Check for samples
                 if activity.samples:
-                    print(f"  Has samples: steps={activity.samples.steps is not None}, "
-                          f"zones={activity.samples.activity_zones is not None}")
+                    print(
+                        f"  Has samples: steps={activity.samples.steps is not None}, "
+                        f"zones={activity.samples.activity_zones is not None}"
+                    )
 
                 assert activity.steps >= 0
                 assert activity.calories >= 0
@@ -343,8 +347,12 @@ class TestRechargeIntegration:
 
             if recharge_list:
                 first = recharge_list[0]
-                print(f"  {first.date}: ANS charge {first.ans_charge:.1f}, status {first.ans_charge_status}")
-                print(f"  HR avg: {first.heart_rate_avg} bpm, HRV avg: {first.heart_rate_variability_avg}ms")
+                print(
+                    f"  {first.date}: ANS charge {first.ans_charge:.1f}, status {first.ans_charge_status}"
+                )
+                print(
+                    f"  HR avg: {first.heart_rate_avg} bpm, HRV avg: {first.heart_rate_variability_avg}ms"
+                )
                 print(f"  Breathing: {first.breathing_rate_avg:.1f} breaths/min")
 
                 # Validate structure
@@ -368,7 +376,9 @@ class TestRechargeIntegration:
                 recharge = await client.recharge.get(date=yesterday)
                 print(f"\nRecharge for {yesterday}:")
                 print(f"  Nightly recharge status: {recharge.nightly_recharge_status}/6")
-                print(f"  ANS charge: {recharge.ans_charge:.1f} (status: {recharge.ans_charge_status}/5)")
+                print(
+                    f"  ANS charge: {recharge.ans_charge:.1f} (status: {recharge.ans_charge_status}/5)"
+                )
                 print(f"  Heart rate: {recharge.heart_rate_avg} bpm")
                 print(f"  HRV: {recharge.heart_rate_variability_avg}ms")
 
@@ -413,7 +423,9 @@ class TestPhysicalInfoIntegration:
             print(f"\nCreated transaction: {transaction.transaction_id}")
 
             # List physical info in transaction
-            info_urls = await client.physical_info.list_physical_info(user_id, transaction.transaction_id)
+            info_urls = await client.physical_info.list_physical_info(
+                user_id, transaction.transaction_id
+            )
             print(f"Found {len(info_urls)} physical information records")
 
             if info_urls:

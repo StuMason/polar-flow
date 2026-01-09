@@ -30,9 +30,7 @@ class StepsSamples(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
-    interval_ms: int = Field(
-        alias="interval-ms", description="Sampling interval in milliseconds"
-    )
+    interval_ms: int = Field(alias="interval-ms", description="Sampling interval in milliseconds")
     total_steps: int = Field(alias="total-steps", description="Total steps for the day")
     samples: list[StepSample] = Field(description="Individual step samples")
 
@@ -107,11 +105,11 @@ class Activity(BaseModel):
     inactive_duration: str = Field(
         alias="inactive-duration", description="Inactive time in ISO 8601 duration format"
     )
-    daily_activity: float = Field(
-        alias="daily-activity", description="Daily activity score", ge=0
-    )
+    daily_activity: float = Field(alias="daily-activity", description="Daily activity score", ge=0)
     calories: int = Field(description="Total calories burned", ge=0)
-    active_calories: int = Field(alias="active-calories", description="Active calories burned", ge=0)
+    active_calories: int = Field(
+        alias="active-calories", description="Active calories burned", ge=0
+    )
     steps: int = Field(description="Total steps taken", ge=0)
     inactivity_alert_count: int = Field(
         alias="inactivity-alert-count", description="Number of inactivity alerts", ge=0
