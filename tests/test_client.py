@@ -98,9 +98,7 @@ async def test_request_authentication_header(httpx_mock: HTTPXMock) -> None:
 @pytest.mark.asyncio
 async def test_request_401_raises_authentication_error(httpx_mock: HTTPXMock) -> None:
     """Test that 401 response raises AuthenticationError."""
-    httpx_mock.add_response(
-        url="https://www.polaraccesslink.com/v3/users/123", status_code=401
-    )
+    httpx_mock.add_response(url="https://www.polaraccesslink.com/v3/users/123", status_code=401)
 
     async with PolarFlow(access_token="test_token_1234567890") as client:
         with pytest.raises(AuthenticationError, match="Invalid or expired"):
@@ -110,9 +108,7 @@ async def test_request_401_raises_authentication_error(httpx_mock: HTTPXMock) ->
 @pytest.mark.asyncio
 async def test_request_404_raises_not_found_error(httpx_mock: HTTPXMock) -> None:
     """Test that 404 response raises NotFoundError."""
-    httpx_mock.add_response(
-        url="https://www.polaraccesslink.com/v3/users/999", status_code=404
-    )
+    httpx_mock.add_response(url="https://www.polaraccesslink.com/v3/users/999", status_code=404)
 
     async with PolarFlow(access_token="test_token_1234567890") as client:
         with pytest.raises(NotFoundError, match="not found"):

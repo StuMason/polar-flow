@@ -41,9 +41,7 @@ def mock_sleep_response() -> dict:
 
 
 @pytest.mark.asyncio
-async def test_sleep_get_with_string_date(
-    httpx_mock: HTTPXMock, mock_sleep_response: dict
-) -> None:
+async def test_sleep_get_with_string_date(httpx_mock: HTTPXMock, mock_sleep_response: dict) -> None:
     """Test getting sleep data with string date."""
     httpx_mock.add_response(
         url="https://www.polaraccesslink.com/v3/users/12345678/sleep/2026-01-09",
@@ -61,9 +59,7 @@ async def test_sleep_get_with_string_date(
 
 
 @pytest.mark.asyncio
-async def test_sleep_get_with_date_object(
-    httpx_mock: HTTPXMock, mock_sleep_response: dict
-) -> None:
+async def test_sleep_get_with_date_object(httpx_mock: HTTPXMock, mock_sleep_response: dict) -> None:
     """Test getting sleep data with date object."""
     httpx_mock.add_response(
         url="https://www.polaraccesslink.com/v3/users/12345678/sleep/2026-01-09",

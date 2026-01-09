@@ -20,9 +20,7 @@ class SleepData(BaseModel):
     sleep_end_time: dt.datetime = Field(description="When sleep ended")
     device_id: str = Field(description="Device ID that recorded the sleep")
     continuity: float = Field(description="Sleep continuity score (1.0-5.0)", ge=1.0, le=5.0)
-    continuity_class: int = Field(
-        description="Sleep continuity classification (1-5)", ge=1, le=5
-    )
+    continuity_class: int = Field(description="Sleep continuity classification (1-5)", ge=1, le=5)
     light_sleep: int = Field(description="Light sleep duration in seconds", ge=0)
     deep_sleep: int = Field(description="Deep sleep duration in seconds", ge=0)
     rem_sleep: int = Field(description="REM sleep duration in seconds", ge=0)

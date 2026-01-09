@@ -56,9 +56,7 @@ class OAuth2Handler:
     AUTHORIZE_URL = "https://flow.polar.com/oauth2/authorization"
     TOKEN_URL = "https://polarremote.com/v2/oauth2/token"
 
-    def __init__(
-        self, client_id: str, client_secret: str, redirect_uri: str | None = None
-    ) -> None:
+    def __init__(self, client_id: str, client_secret: str, redirect_uri: str | None = None) -> None:
         """Initialize OAuth2 handler.
 
         Args:

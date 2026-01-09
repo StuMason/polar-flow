@@ -22,9 +22,7 @@ def test_oauth2_handler_initialization() -> None:
 
 def test_oauth2_handler_initialization_strips_whitespace() -> None:
     """Test that client_id and client_secret are stripped."""
-    oauth = OAuth2Handler(
-        client_id="  client_id  ", client_secret="  client_secret  "
-    )
+    oauth = OAuth2Handler(client_id="  client_id  ", client_secret="  client_secret  ")
 
     assert oauth.client_id == "client_id"
     assert oauth.client_secret == "client_secret"

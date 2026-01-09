@@ -35,9 +35,7 @@ async def oauth_flow_example() -> str:
     client_secret = os.getenv("POLAR_CLIENT_SECRET")
 
     if not client_id or not client_secret:
-        raise ValueError(
-            "POLAR_CLIENT_ID and POLAR_CLIENT_SECRET environment variables required"
-        )
+        raise ValueError("POLAR_CLIENT_ID and POLAR_CLIENT_SECRET environment variables required")
 
     oauth = OAuth2Handler(
         client_id=client_id,
@@ -60,9 +58,7 @@ async def oauth_flow_example() -> str:
     return token.access_token
 
 
-async def fetch_single_day_sleep(
-    access_token: str, user_id: str, date_str: str
-) -> None:
+async def fetch_single_day_sleep(access_token: str, user_id: str, date_str: str) -> None:
     """Fetch and display sleep data for a single day.
 
     Args:
@@ -97,9 +93,7 @@ async def fetch_single_day_sleep(
         if sleep.heart_rate_avg:
             print(f"Average HR: {sleep.heart_rate_avg} bpm")
             if sleep.heart_rate_min and sleep.heart_rate_max:
-                print(
-                    f"HR Range: {sleep.heart_rate_min}-{sleep.heart_rate_max} bpm"
-                )
+                print(f"HR Range: {sleep.heart_rate_min}-{sleep.heart_rate_max} bpm")
 
         if sleep.breathing_rate_avg:
             print(f"Breathing Rate: {sleep.breathing_rate_avg} breaths/min")
@@ -139,8 +133,10 @@ async def fetch_weekly_sleep(access_token: str, user_id: str) -> None:
         avg_efficiency = sum(s.sleep_efficiency for s in sleep_list) / len(sleep_list)
 
         print("-" * 60)
-        print(f"Averages:    {avg_score:>3.0f}/100  "
-              f"{'':12} {avg_duration:>5.1f}h     {avg_efficiency:>5.1f}%")
+        print(
+            f"Averages:    {avg_score:>3.0f}/100  "
+            f"{'':12} {avg_duration:>5.1f}h     {avg_efficiency:>5.1f}%"
+        )
 
 
 async def main() -> None:

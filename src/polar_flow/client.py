@@ -193,9 +193,7 @@ class PolarFlow:
             PolarFlowError: For other non-success status codes
         """
         if response.status_code == 401:
-            raise AuthenticationError(
-                "Invalid or expired access token. Please re-authenticate."
-            )
+            raise AuthenticationError("Invalid or expired access token. Please re-authenticate.")
 
         if response.status_code == 404:
             raise NotFoundError(f"Resource not found: {response.url.path}")
@@ -243,5 +241,5 @@ class PolarFlow:
             if remaining_int < limit_int * 0.1:
                 logger.warning(
                     f"Rate limit warning: Only {remaining_int}/{limit_int} "
-                    f"requests remaining ({remaining_int/limit_int*100:.1f}%)"
+                    f"requests remaining ({remaining_int / limit_int * 100:.1f}%)"
                 )

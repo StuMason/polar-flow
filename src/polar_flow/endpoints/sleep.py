@@ -88,7 +88,9 @@ class SleepEndpoint:
         end = (
             date.today()
             if end_date is None
-            else date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
+            else date.fromisoformat(end_date)
+            if isinstance(end_date, str)
+            else end_date
         )
 
         # Generate date range (end_date going backwards for 'days' days)
