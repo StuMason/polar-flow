@@ -225,17 +225,12 @@ def test_sleep_data_optional_fields() -> None:
     sleep = SleepData(**data)
 
     # Optional fields should be None
-    assert sleep.heart_rate_avg is None
-    assert sleep.heart_rate_min is None
-    assert sleep.heart_rate_max is None
-    assert sleep.hrv_avg is None
-    assert sleep.breathing_rate_avg is None
     assert sleep.hypnogram is None
     assert sleep.heart_rate_samples is None
 
 
 def test_sleep_data_with_optional_fields() -> None:
-    """Test SleepData with optional physiological measurements."""
+    """Test SleepData with optional sample data."""
     data = {
         "polar_user": "123",
         "date": "2026-01-09",
@@ -259,20 +254,14 @@ def test_sleep_data_with_optional_fields() -> None:
         "group_duration_score": 85.0,
         "group_solidity_score": 80.0,
         "group_regeneration_score": 90.0,
-        "heart_rate_avg": 55,
-        "heart_rate_min": 45,
-        "heart_rate_max": 65,
-        "hrv_avg": 45.5,
-        "breathing_rate_avg": 14.5,
+        "hypnogram": {"22:00": 1, "22:30": 3, "23:00": 4},
+        "heart_rate_samples": {"22:00": 55, "22:30": 52, "23:00": 48},
     }
 
     sleep = SleepData(**data)
 
-    assert sleep.heart_rate_avg == 55
-    assert sleep.heart_rate_min == 45
-    assert sleep.heart_rate_max == 65
-    assert sleep.hrv_avg == 45.5
-    assert sleep.breathing_rate_avg == 14.5
+    assert sleep.hypnogram == {"22:00": 1, "22:30": 3, "23:00": 4}
+    assert sleep.heart_rate_samples == {"22:00": 55, "22:30": 52, "23:00": 48}
 
 
 def test_sleep_data_datetime_parsing() -> None:
@@ -309,7 +298,7 @@ def test_sleep_data_datetime_parsing() -> None:
 
 
 def test_sleep_data_validation_sleep_score_range() -> None:
-    """Test that sleep_score validation enforces 1-100 range."""
+    """Test that sleep_score validation enforces 0-100 range (0 = no data)."""
     base_data = {
         "polar_user": "123",
         "date": "2026-01-09",
@@ -334,16 +323,16 @@ def test_sleep_data_validation_sleep_score_range() -> None:
         "group_regeneration_score": 90.0,
     }
 
-    # Valid: 1-100
-    sleep = SleepData(**{**base_data, "sleep_score": 1})
-    assert sleep.sleep_score == 1
+    # Valid: 0-100 (0 means no data)
+    sleep = SleepData(**{**base_data, "sleep_score": 0})
+    assert sleep.sleep_score == 0
 
     sleep = SleepData(**{**base_data, "sleep_score": 100})
     assert sleep.sleep_score == 100
 
-    # Invalid: < 1
+    # Invalid: < 0
     with pytest.raises(ValidationError):
-        SleepData(**{**base_data, "sleep_score": 0})
+        SleepData(**{**base_data, "sleep_score": -1})
 
     # Invalid: > 100
     with pytest.raises(ValidationError):

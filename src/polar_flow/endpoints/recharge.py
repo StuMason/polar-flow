@@ -72,12 +72,12 @@ class RechargeEndpoint:
         path = "/v3/users/nightly-recharge"
         response = await self.client._request("GET", path)
 
-        # API returns array directly
+        # API returns {"recharges": [...]}
         if isinstance(response, list):
             results = [NightlyRecharge.model_validate(recharge) for recharge in response]
         else:
-            # Fallback for dict response
-            recharge_data = response.get("recharge", [])
+            # API returns dict with "recharges" key (plural)
+            recharge_data = response.get("recharges", [])
             results = [NightlyRecharge.model_validate(recharge) for recharge in recharge_data]
 
         # Filter by since date if provided

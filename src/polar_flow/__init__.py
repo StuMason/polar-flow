@@ -10,6 +10,9 @@ from polar_flow.exceptions import (
     ValidationError,
 )
 from polar_flow.models.activity import Activity, ActivitySamples
+from polar_flow.models.activity_samples import DailyActivitySamples, StepData, StepSample
+from polar_flow.models.cardio_load import CardioLoad, CardioLoadLevel
+from polar_flow.models.continuous_hr import ContinuousHeartRate, HeartRateSample
 from polar_flow.models.exercise import (
     Exercise,
     ExerciseSample,
@@ -20,17 +23,25 @@ from polar_flow.models.exercise import (
 from polar_flow.models.physical_info import PhysicalInformation
 from polar_flow.models.recharge import NightlyRecharge
 from polar_flow.models.sleep import SleepData
+from polar_flow.models.sleepwise_alertness import AlertnessHourlyData, SleepWiseAlertness
+from polar_flow.models.sleepwise_bedtime import SleepWiseBedtime
 from polar_flow.models.user import UserInfo
 
-__version__ = "1.1.0"
+__version__ = "1.3.0"
 __all__ = [
     "Activity",
     "ActivitySamples",
+    "AlertnessHourlyData",
     "AuthenticationError",
+    "CardioLoad",
+    "CardioLoadLevel",
+    "ContinuousHeartRate",
+    "DailyActivitySamples",
     "Exercise",
     "ExerciseSample",
     "ExerciseSamples",
     "ExerciseZones",
+    "HeartRateSample",
     "HeartRateZone",
     "NightlyRecharge",
     "NotFoundError",
@@ -41,6 +52,10 @@ __all__ = [
     "PolarFlowError",
     "RateLimitError",
     "SleepData",
+    "SleepWiseAlertness",
+    "SleepWiseBedtime",
+    "StepData",
+    "StepSample",
     "UserInfo",
     "ValidationError",
     "load_token_from_file",

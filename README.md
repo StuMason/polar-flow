@@ -8,10 +8,6 @@
 
 Modern async Python client for Polar AccessLink API.
 
-## Documentation
-
-Full documentation available at **[stumason.github.io/polar-flow](https://stumason.github.io/polar-flow/)**
-
 ## Features
 
 - Async-first with httpx

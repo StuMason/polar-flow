@@ -35,21 +35,24 @@ class NightlyRecharge(BaseModel):
         description="Average breathing rate (breaths per minute)",
         ge=0,
     )
-    nightly_recharge_status: int = Field(
+    nightly_recharge_status: int | None = Field(
+        default=None,
         alias="nightly-recharge-status",
-        description="Recovery status scale 1-6 (1=compromised, 6=excellent)",
+        description="Recovery status scale 1-6 (1=compromised, 6=excellent), None if not available",
         ge=1,
         le=6,
     )
-    ans_charge: float = Field(
+    ans_charge: float | None = Field(
+        default=None,
         alias="ans-charge",
-        description="Autonomic nervous system charge (-10.0 to +10.0)",
+        description="Autonomic nervous system charge (-10.0 to +10.0), None if not available",
         ge=-10.0,
         le=10.0,
     )
-    ans_charge_status: int = Field(
+    ans_charge_status: int | None = Field(
+        default=None,
         alias="ans-charge-status",
-        description="ANS charge status scale 1-5",
+        description="ANS charge status scale 1-5, None if not available",
         ge=1,
         le=5,
     )

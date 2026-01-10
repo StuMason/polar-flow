@@ -57,10 +57,14 @@ class PolarFlow:
 
         # Import endpoints here to avoid circular imports
         from polar_flow.endpoints.activity import ActivityEndpoint
+        from polar_flow.endpoints.activity_samples import ActivitySamplesEndpoint
+        from polar_flow.endpoints.cardio_load import CardioLoadEndpoint
+        from polar_flow.endpoints.continuous_hr import ContinuousHREndpoint
         from polar_flow.endpoints.exercises import ExercisesEndpoint
         from polar_flow.endpoints.physical_info import PhysicalInfoEndpoint
         from polar_flow.endpoints.recharge import RechargeEndpoint
         from polar_flow.endpoints.sleep import SleepEndpoint
+        from polar_flow.endpoints.sleepwise import SleepWiseEndpoint
         from polar_flow.endpoints.users import UsersEndpoint
 
         self.sleep = SleepEndpoint(self)
@@ -69,6 +73,10 @@ class PolarFlow:
         self.recharge = RechargeEndpoint(self)
         self.users = UsersEndpoint(self)
         self.physical_info = PhysicalInfoEndpoint(self)
+        self.cardio_load = CardioLoadEndpoint(self)
+        self.sleepwise = SleepWiseEndpoint(self)
+        self.activity_samples = ActivitySamplesEndpoint(self)
+        self.continuous_hr = ContinuousHREndpoint(self)
 
     async def __aenter__(self) -> "PolarFlow":
         """Enter async context manager.

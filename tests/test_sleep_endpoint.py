@@ -1,6 +1,6 @@
 """Tests for sleep endpoint."""
 
-from datetime import date
+from datetime import date, timedelta
 
 import pytest
 from pytest_httpx import HTTPXMock
@@ -35,8 +35,34 @@ def mock_sleep_response() -> dict:
         "group_duration_score": 85.5,
         "group_solidity_score": 80.0,
         "group_regeneration_score": 90.0,
-        "heart_rate_avg": 55,
-        "hrv_avg": 45.5,
+    }
+
+
+def make_sleep_data(day: date, score: int) -> dict:
+    """Create sleep data dict for a given day."""
+    return {
+        "polar_user": "123",
+        "date": day.isoformat(),
+        "sleep_start_time": f"{(day - timedelta(days=1)).isoformat()}T22:00:00Z",
+        "sleep_end_time": f"{day.isoformat()}T06:00:00Z",
+        "device_id": "DEV123",
+        "continuity": 3.0,
+        "continuity_class": 3,
+        "light_sleep": 14400,
+        "deep_sleep": 7200,
+        "rem_sleep": 3600,
+        "unrecognized_sleep_stage": 0,
+        "sleep_score": score,
+        "total_interruption_duration": 600,
+        "sleep_charge": 80,
+        "sleep_goal": 28800,
+        "sleep_rating": 4,
+        "short_interruption_duration": 300,
+        "long_interruption_duration": 300,
+        "sleep_cycles": 5,
+        "group_duration_score": 85.0,
+        "group_solidity_score": 80.0,
+        "group_regeneration_score": 90.0,
     }
 
 
@@ -96,36 +122,16 @@ async def test_sleep_get_computed_properties(
 @pytest.mark.asyncio
 async def test_sleep_list_default_days(httpx_mock: HTTPXMock) -> None:
     """Test listing sleep data for default 7 days."""
-    # Mock responses for last 7 days
-    for i in range(7):
-        day = date.today() - __import__("datetime").timedelta(days=i)
-        httpx_mock.add_response(
-            url=f"https://www.polaraccesslink.com/v3/users/123/sleep/{day.isoformat()}",
-            json={
-                "polar_user": "123",
-                "date": day.isoformat(),
-                "sleep_start_time": "2026-01-08T22:00:00Z",
-                "sleep_end_time": "2026-01-09T06:00:00Z",
-                "device_id": "DEV123",
-                "continuity": 3.0,
-                "continuity_class": 3,
-                "light_sleep": 14400,
-                "deep_sleep": 7200,
-                "rem_sleep": 3600,
-                "unrecognized_sleep_stage": 0,
-                "sleep_score": 80 + i,  # Vary scores
-                "total_interruption_duration": 600,
-                "sleep_charge": 80,
-                "sleep_goal": 28800,
-                "sleep_rating": 4,
-                "short_interruption_duration": 300,
-                "long_interruption_duration": 300,
-                "sleep_cycles": 5,
-                "group_duration_score": 85.0,
-                "group_solidity_score": 80.0,
-                "group_regeneration_score": 90.0,
-            },
-        )
+    today = date.today()
+    start = today - timedelta(days=6)
+
+    # Create nights data for 7 days
+    nights = [make_sleep_data(today - timedelta(days=i), 80 + i) for i in range(7)]
+
+    httpx_mock.add_response(
+        url=f"https://www.polaraccesslink.com/v3/users/sleep?from={start}&to={today}",
+        json={"nights": nights},
+    )
 
     async with PolarFlow(access_token="test_token_1234567890") as client:
         sleep_list = await client.sleep.list(user_id="123", days=7)
@@ -141,36 +147,15 @@ async def test_sleep_list_default_days(httpx_mock: HTTPXMock) -> None:
 @pytest.mark.asyncio
 async def test_sleep_list_custom_days(httpx_mock: HTTPXMock) -> None:
     """Test listing sleep data for custom number of days."""
-    # Mock responses for 3 days
-    for i in range(3):
-        day = date.today() - __import__("datetime").timedelta(days=i)
-        httpx_mock.add_response(
-            url=f"https://www.polaraccesslink.com/v3/users/123/sleep/{day.isoformat()}",
-            json={
-                "polar_user": "123",
-                "date": day.isoformat(),
-                "sleep_start_time": "2026-01-08T22:00:00Z",
-                "sleep_end_time": "2026-01-09T06:00:00Z",
-                "device_id": "DEV123",
-                "continuity": 3.0,
-                "continuity_class": 3,
-                "light_sleep": 14400,
-                "deep_sleep": 7200,
-                "rem_sleep": 3600,
-                "unrecognized_sleep_stage": 0,
-                "sleep_score": 85,
-                "total_interruption_duration": 600,
-                "sleep_charge": 80,
-                "sleep_goal": 28800,
-                "sleep_rating": 4,
-                "short_interruption_duration": 300,
-                "long_interruption_duration": 300,
-                "sleep_cycles": 5,
-                "group_duration_score": 85.0,
-                "group_solidity_score": 80.0,
-                "group_regeneration_score": 90.0,
-            },
-        )
+    today = date.today()
+    start = today - timedelta(days=2)
+
+    nights = [make_sleep_data(today - timedelta(days=i), 85) for i in range(3)]
+
+    httpx_mock.add_response(
+        url=f"https://www.polaraccesslink.com/v3/users/sleep?from={start}&to={today}",
+        json={"nights": nights},
+    )
 
     async with PolarFlow(access_token="test_token_1234567890") as client:
         sleep_list = await client.sleep.list(user_id="123", days=3)
@@ -190,78 +175,36 @@ async def test_sleep_list_invalid_days_raises_error() -> None:
 
 
 @pytest.mark.asyncio
-async def test_sleep_list_skips_missing_dates(httpx_mock: HTTPXMock) -> None:
-    """Test that list() skips dates with no data (404 errors)."""
-    # Mock 3 days: first exists, second 404, third exists
-    day0 = date.today()
-    day1 = date.today() - __import__("datetime").timedelta(days=1)
-    day2 = date.today() - __import__("datetime").timedelta(days=2)
+async def test_sleep_list_with_since_parameter(httpx_mock: HTTPXMock) -> None:
+    """Test listing sleep data with since parameter."""
+    today = date.today()
+    since = today - timedelta(days=5)
+
+    nights = [make_sleep_data(today - timedelta(days=i), 85) for i in range(6)]
 
     httpx_mock.add_response(
-        url=f"https://www.polaraccesslink.com/v3/users/123/sleep/{day0.isoformat()}",
-        json={
-            "polar_user": "123",
-            "date": day0.isoformat(),
-            "sleep_start_time": "2026-01-08T22:00:00Z",
-            "sleep_end_time": "2026-01-09T06:00:00Z",
-            "device_id": "DEV123",
-            "continuity": 3.0,
-            "continuity_class": 3,
-            "light_sleep": 14400,
-            "deep_sleep": 7200,
-            "rem_sleep": 3600,
-            "unrecognized_sleep_stage": 0,
-            "sleep_score": 85,
-            "total_interruption_duration": 600,
-            "sleep_charge": 80,
-            "sleep_goal": 28800,
-            "sleep_rating": 4,
-            "short_interruption_duration": 300,
-            "long_interruption_duration": 300,
-            "sleep_cycles": 5,
-            "group_duration_score": 85.0,
-            "group_solidity_score": 80.0,
-            "group_regeneration_score": 90.0,
-        },
-    )
-
-    httpx_mock.add_response(
-        url=f"https://www.polaraccesslink.com/v3/users/123/sleep/{day1.isoformat()}",
-        status_code=404,
-    )
-
-    httpx_mock.add_response(
-        url=f"https://www.polaraccesslink.com/v3/users/123/sleep/{day2.isoformat()}",
-        json={
-            "polar_user": "123",
-            "date": day2.isoformat(),
-            "sleep_start_time": "2026-01-08T22:00:00Z",
-            "sleep_end_time": "2026-01-09T06:00:00Z",
-            "device_id": "DEV123",
-            "continuity": 3.0,
-            "continuity_class": 3,
-            "light_sleep": 14400,
-            "deep_sleep": 7200,
-            "rem_sleep": 3600,
-            "unrecognized_sleep_stage": 0,
-            "sleep_score": 80,
-            "total_interruption_duration": 600,
-            "sleep_charge": 80,
-            "sleep_goal": 28800,
-            "sleep_rating": 4,
-            "short_interruption_duration": 300,
-            "long_interruption_duration": 300,
-            "sleep_cycles": 5,
-            "group_duration_score": 85.0,
-            "group_solidity_score": 80.0,
-            "group_regeneration_score": 90.0,
-        },
+        url=f"https://www.polaraccesslink.com/v3/users/sleep?from={since}&to={today}",
+        json={"nights": nights},
     )
 
     async with PolarFlow(access_token="test_token_1234567890") as client:
-        sleep_list = await client.sleep.list(user_id="123", days=3)
+        sleep_list = await client.sleep.list(since=since.isoformat())
 
-    # Should only return 2 items (skipping the 404)
-    assert len(sleep_list) == 2
-    assert sleep_list[0].date == day0
-    assert sleep_list[1].date == day2
+    assert len(sleep_list) == 6
+
+
+@pytest.mark.asyncio
+async def test_sleep_list_empty_response(httpx_mock: HTTPXMock) -> None:
+    """Test listing sleep data with empty response."""
+    today = date.today()
+    start = today - timedelta(days=6)
+
+    httpx_mock.add_response(
+        url=f"https://www.polaraccesslink.com/v3/users/sleep?from={start}&to={today}",
+        json={"nights": []},
+    )
+
+    async with PolarFlow(access_token="test_token_1234567890") as client:
+        sleep_list = await client.sleep.list(days=7)
+
+    assert len(sleep_list) == 0
