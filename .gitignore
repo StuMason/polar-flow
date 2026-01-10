@@ -65,3 +65,6 @@ dmypy.json
 
 # Distribution
 *.whl
+
+# MkDocs
+site/
