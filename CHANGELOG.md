@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-01-10
+
+### Added - Complete V3 API Coverage
+- Cardio Load endpoint with strain, tolerance, and recovery status
+- SleepWise Alertness endpoint with hourly alertness predictions
+- SleepWise Circadian Bedtime endpoint with optimal sleep timing recommendations
+- Activity Samples endpoint with minute-by-minute step data and activity zones
+- Continuous Heart Rate endpoint with all-day HR samples
+
+### Fixed
+- Removed non-existent fields from Sleep model (`hrv_avg`, `heart_rate_avg`, `heart_rate_min`, `heart_rate_max`, `breathing_rate_avg`)
+- Sleep API only returns `heart_rate_samples` dict, not aggregated values
+- HRV data comes from Nightly Recharge endpoint, not Sleep
+
+### Changed
+- All 5 new endpoints verified against real Polar API before implementation
+- 91 tests passing with full coverage
+
 ## [1.1.0] - 2026-01-09
 
 ### Added
