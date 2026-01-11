@@ -62,8 +62,8 @@ from polar_flow import PolarFlow
 
 async def main():
     async with PolarFlow(access_token="your_token") as client:
-        # Get sleep data
-        sleep_data = await client.sleep.list(user_id="self", days=7)
+        # Get sleep data (no user_id needed)
+        sleep_data = await client.sleep.list(days=7)
         for night in sleep_data:
             print(f"{night.date}: {night.sleep_score}/100 ({night.total_sleep_hours:.1f}h)")
 
@@ -82,29 +82,34 @@ async def main():
     token = load_token_from_file()  # Reads ~/.polar-flow/token
 
     async with PolarFlow(access_token=token) as client:
-        sleep_data = await client.sleep.list(user_id="self", days=7)
+        sleep_data = await client.sleep.list(days=7)
         for night in sleep_data:
             print(f"{night.date}: {night.sleep_score}/100")
 
 asyncio.run(main())
 ```
 
-## 3. Explore Different Endpoints
+## 3. Explore Endpoints
 
 ### Sleep Data
 
 ```python
 async with PolarFlow(access_token=token) as client:
-    # Get sleep for specific date
-    sleep = await client.sleep.get(user_id="self", date="2026-01-09")
-    print(f"Sleep score: {sleep.sleep_score}")
-    print(f"Total sleep: {sleep.total_sleep_hours}h")
-    print(f"Deep sleep: {sleep.deep_sleep_seconds / 3600:.1f}h")
-
-    # List sleep data for date range
-    sleep_list = await client.sleep.list(user_id="self", days=7)
+    # List sleep data (last 7 days)
+    sleep_list = await client.sleep.list(days=7)
     for night in sleep_list:
         print(f"{night.date}: score {night.sleep_score}")
+        print(f"  Total: {night.total_sleep_hours:.1f}h")
+        print(f"  Deep: {night.deep_sleep_seconds / 3600:.1f}h")
+```
+
+### Nightly Recharge (HRV)
+
+```python
+async with PolarFlow(access_token=token) as client:
+    recharge = await client.recharge.list(days=7)
+    for r in recharge:
+        print(f"{r.date}: ANS {r.ans_charge}, HRV {r.hrv_avg}ms")
 ```
 
 ### Exercises
@@ -115,38 +120,87 @@ async with PolarFlow(access_token=token) as client:
     exercises = await client.exercises.list()
     for ex in exercises:
         print(f"{ex.start_time}: {ex.sport}")
-        print(f"  Duration: {ex.duration_minutes} min")
+        print(f"  Duration: {ex.duration_minutes:.0f} min")
         print(f"  Calories: {ex.calories}")
 
     # Get detailed exercise with samples
-    exercise = await client.exercises.get(exercise_id="123")
-    samples = await client.exercises.get_samples(exercise_id="123")
+    if exercises:
+        samples = await client.exercises.get_samples(exercises[0].id)
 ```
 
 ### Activity Data
 
 ```python
 async with PolarFlow(access_token=token) as client:
-    # Get today's activity
-    from datetime import date
-    activity = await client.activity.get(date=str(date.today()))
-    print(f"Steps: {activity.steps}")
-    print(f"Calories: {activity.calories}")
-    print(f"Distance: {activity.distance_km} km")
+    activities = await client.activity.list(days=7)
+    for a in activities:
+        print(f"{a.date}: {a.steps} steps, {a.calories} cal")
 ```
 
-### Nightly Recharge
+### Cardio Load
 
 ```python
 async with PolarFlow(access_token=token) as client:
-    # Get recharge data
-    recharge = await client.recharge.list()
-    for r in recharge:
-        print(f"{r.date}: ANS charge {r.ans_charge}")
+    cardio = await client.cardio_load.list(days=7)
+    for c in cardio:
+        print(f"{c.date}: strain {c.strain}, tolerance {c.tolerance}")
+        print(f"  Load ratio: {c.cardio_load_ratio:.2f}")
+```
+
+### SleepWise Alertness
+
+```python
+async with PolarFlow(access_token=token) as client:
+    alertness = await client.sleepwise_alertness.list(days=3)
+    for a in alertness:
+        print(f"Grade: {a.grade}/5 ({a.grade_classification})")
+```
+
+### Biosensing (SpO2, ECG, Temperature)
+
+Requires a compatible device (e.g., Vantage V3 with Elixir sensor):
+
+```python
+async with PolarFlow(access_token=token) as client:
+    # Blood oxygen
+    spo2 = await client.biosensing.get_spo2()
+    for s in spo2:
+        print(f"SpO2: {s.blood_oxygen_percent}% ({s.spo2_class})")
+
+    # ECG
+    ecg = await client.biosensing.get_ecg()
+    for e in ecg:
+        print(f"ECG: HR {e.average_heart_rate_bpm}, HRV {e.heart_rate_variability_ms}ms")
+
+    # Body temperature
+    body_temp = await client.biosensing.get_body_temperature()
+    for t in body_temp:
+        print(f"Temp: {t.avg_temperature:.1f}°C")
+
+    # Skin temperature
+    skin_temp = await client.biosensing.get_skin_temperature()
+    for t in skin_temp:
+        print(f"Skin: {t.sleep_time_skin_temperature_celsius:.1f}°C")
+```
+
+## 4. Error Handling
+
+```python
+from polar_flow import PolarFlow, NotFoundError, RateLimitError
+import asyncio
+
+async with PolarFlow(access_token=token) as client:
+    try:
+        sleep = await client.sleep.list(days=7)
+    except NotFoundError:
+        print("No sleep data found")
+    except RateLimitError as e:
+        print(f"Rate limited. Retry after {e.retry_after}s")
+        await asyncio.sleep(e.retry_after)
 ```
 
 ## Next Steps
 
-- Read the [Error Handling](error-handling.md) guide to handle exceptions properly
+- Read the [Error Handling](error-handling.md) guide for robust error handling
 - Explore the [API Reference](api/client.md) for complete documentation
-- Check [Advanced Usage](advanced.md) for patterns like incremental sync and rate limit handling
+- Check [Advanced Usage](advanced.md) for patterns like incremental sync and bulk fetching

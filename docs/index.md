@@ -7,7 +7,7 @@ Modern async Python client for Polar AccessLink API.
 - Async-first with httpx
 - Full type safety with Pydantic 2 and mypy strict mode
 - Python 3.11+ with modern syntax
-- Complete V3 API coverage
+- Complete V3 API coverage (14 endpoints)
 - 90%+ test coverage
 
 ## Installation
@@ -24,7 +24,8 @@ from polar_flow import PolarFlow
 
 async def main():
     async with PolarFlow(access_token="your_token") as client:
-        sleep_data = await client.sleep.list(user_id="self", days=7)
+        # Get last 7 days of sleep
+        sleep_data = await client.sleep.list(days=7)
         for night in sleep_data:
             print(f"{night.date}: {night.sleep_score}/100")
 
@@ -35,14 +36,32 @@ asyncio.run(main())
 
 Complete Polar AccessLink V3 API implementation:
 
+### Core Endpoints
+- **Sleep** - Sleep tracking data (score, stages, duration)
+- **Nightly Recharge** - Recovery metrics (ANS charge, HRV, breathing rate)
+- **Activity** - Daily activity (steps, calories, distance, active time)
+- **Exercises** - Workout data with samples, zones, TCX/GPX export
+
+### Advanced Analytics
+- **Cardio Load** - Training load, strain, tolerance
+- **SleepWise Alertness** - Hourly alertness predictions
+- **SleepWise Circadian Bedtime** - Optimal sleep timing recommendations
+- **Activity Samples** - Minute-by-minute activity data
+- **Continuous Heart Rate** - Daily HR summaries
+
+### Biosensing (v1.4.0+)
+- **SpO2** - Blood oxygen measurements
+- **ECG** - Electrocardiogram data with waveforms
+- **Body Temperature** - Continuous temperature monitoring
+- **Skin Temperature** - Nightly skin temperature
+
+### Account Management
+- **Users** - Register, get, delete users
+- **Physical Info** - Body metrics (height, weight, etc.)
+
+### Utilities
 - OAuth2 authentication with HTTP Basic Auth
-- Sleep endpoint (get/list sleep data)
-- Exercises endpoint (list/get/samples/zones/export TCX/GPX)
-- Activity endpoint (daily activity with steps/zones/inactivity)
-- Nightly Recharge endpoint (ANS charge, HRV, breathing rate)
-- Users endpoint (register/get/delete)
-- Physical Information endpoint (transaction-based body metrics)
-- CLI authentication tool
+- CLI authentication tool (`polar-flow auth`)
 
 All endpoints tested and validated against real Polar API.
 
