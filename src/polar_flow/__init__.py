@@ -11,6 +11,15 @@ from polar_flow.exceptions import (
 )
 from polar_flow.models.activity import Activity, ActivitySamples
 from polar_flow.models.activity_samples import DailyActivitySamples, StepData, StepSample
+from polar_flow.models.biosensing import (
+    BodyTemperaturePeriod,
+    ECGQualityMeasurement,
+    ECGResult,
+    ECGSample,
+    SkinTemperature,
+    SpO2Result,
+    TemperatureSample,
+)
 from polar_flow.models.cardio_load import CardioLoad, CardioLoadLevel
 from polar_flow.models.continuous_hr import ContinuousHeartRate, HeartRateSample
 from polar_flow.models.exercise import (
@@ -27,16 +36,20 @@ from polar_flow.models.sleepwise_alertness import AlertnessHourlyData, SleepWise
 from polar_flow.models.sleepwise_bedtime import SleepWiseBedtime
 from polar_flow.models.user import UserInfo
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 __all__ = [
     "Activity",
     "ActivitySamples",
     "AlertnessHourlyData",
     "AuthenticationError",
+    "BodyTemperaturePeriod",
     "CardioLoad",
     "CardioLoadLevel",
     "ContinuousHeartRate",
     "DailyActivitySamples",
+    "ECGQualityMeasurement",
+    "ECGResult",
+    "ECGSample",
     "Exercise",
     "ExerciseSample",
     "ExerciseSamples",
@@ -51,11 +64,14 @@ __all__ = [
     "PolarFlow",
     "PolarFlowError",
     "RateLimitError",
+    "SkinTemperature",
     "SleepData",
     "SleepWiseAlertness",
     "SleepWiseBedtime",
+    "SpO2Result",
     "StepData",
     "StepSample",
+    "TemperatureSample",
     "UserInfo",
     "ValidationError",
     "load_token_from_file",
