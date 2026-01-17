@@ -21,17 +21,11 @@ class SpO2Result(BaseModel):
     test_status: str = Field(description="Test completion status")
     blood_oxygen_percent: int = Field(ge=0, le=100, description="SpO2 percentage")
     spo2_class: str = Field(description="Classification (NORMAL, LOW, etc.)")
-    spo2_value_deviation_from_baseline: str = Field(
-        description="Deviation from user's baseline"
-    )
-    spo2_quality_average_percent: float = Field(
-        description="Signal quality percentage"
-    )
+    spo2_value_deviation_from_baseline: str = Field(description="Deviation from user's baseline")
+    spo2_quality_average_percent: float = Field(description="Signal quality percentage")
     average_heart_rate_bpm: int = Field(description="Average HR during test")
     heart_rate_variability_ms: float = Field(description="HRV in milliseconds")
-    spo2_hrv_deviation_from_baseline: str = Field(
-        description="HRV deviation from baseline"
-    )
+    spo2_hrv_deviation_from_baseline: str = Field(description="HRV deviation from baseline")
     altitude_meters: float | None = Field(default=None, description="Altitude if available")
 
     @property
@@ -65,16 +59,10 @@ class ECGResult(BaseModel):
     time_zone_offset: int = Field(description="Timezone offset in minutes")
     average_heart_rate_bpm: int = Field(description="Average HR during test")
     heart_rate_variability_ms: float = Field(description="HRV in milliseconds (RMSSD)")
-    heart_rate_variability_level: str = Field(
-        description="HRV classification (LOW, NORMAL, HIGH)"
-    )
+    heart_rate_variability_level: str = Field(description="HRV classification (LOW, NORMAL, HIGH)")
     rri_ms: float = Field(description="R-R interval in milliseconds")
-    pulse_transit_time_systolic_ms: float | None = Field(
-        default=None, description="PTT systolic"
-    )
-    pulse_transit_time_diastolic_ms: float | None = Field(
-        default=None, description="PTT diastolic"
-    )
+    pulse_transit_time_systolic_ms: float | None = Field(default=None, description="PTT systolic")
+    pulse_transit_time_diastolic_ms: float | None = Field(default=None, description="PTT diastolic")
     pulse_transit_time_quality_index: float | None = Field(
         default=None, description="PTT quality index"
     )
@@ -103,9 +91,7 @@ class TemperatureSample(BaseModel):
     """Single temperature measurement sample."""
 
     temperature_celsius: float = Field(description="Temperature in Celsius")
-    recording_time_delta_milliseconds: int = Field(
-        description="Time offset from period start (ms)"
-    )
+    recording_time_delta_milliseconds: int = Field(description="Time offset from period start (ms)")
 
 
 class BodyTemperaturePeriod(BaseModel):
@@ -156,12 +142,8 @@ class BodyTemperaturePeriod(BaseModel):
 class SkinTemperature(BaseModel):
     """Sleep skin temperature with baseline deviation."""
 
-    sleep_time_skin_temperature_celsius: float = Field(
-        description="Skin temperature during sleep"
-    )
-    deviation_from_baseline_celsius: float = Field(
-        description="Deviation from user's baseline"
-    )
+    sleep_time_skin_temperature_celsius: float = Field(description="Skin temperature during sleep")
+    deviation_from_baseline_celsius: float = Field(description="Deviation from user's baseline")
     sleep_date: str = Field(description="Date of sleep (YYYY-MM-DD)")
 
     @property
