@@ -63,7 +63,7 @@ class SleepEndpoint:
 
     async def list(
         self,
-        user_id: str | None = None,  # Keep for backwards compat but not used
+        _user_id: str | None = None,  # Keep for backwards compat but not used
         *,
         days: int | None = None,
         since: str | None = None,
