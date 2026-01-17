@@ -50,11 +50,15 @@ class ActivitySamplesEndpoint:
             ```
         """
         # Determine date range
-        end = date.today() if to_date is None else (
-            date.fromisoformat(to_date) if isinstance(to_date, str) else to_date
+        end = (
+            date.today()
+            if to_date is None
+            else (date.fromisoformat(to_date) if isinstance(to_date, str) else to_date)
         )
-        start = end - timedelta(days=days - 1) if from_date is None else (
-            date.fromisoformat(from_date) if isinstance(from_date, str) else from_date
+        start = (
+            end - timedelta(days=days - 1)
+            if from_date is None
+            else (date.fromisoformat(from_date) if isinstance(from_date, str) else from_date)
         )
 
         path = f"/v3/users/activities/samples?from={start}&to={end}"

@@ -102,9 +102,7 @@ class TestBiosensingSpO2:
     """Tests for SpO2 endpoint."""
 
     @pytest.mark.asyncio
-    async def test_get_spo2_success(
-        self, httpx_mock: HTTPXMock, spo2_response: list[dict]
-    ) -> None:
+    async def test_get_spo2_success(self, httpx_mock: HTTPXMock, spo2_response: list[dict]) -> None:
         """Test successful SpO2 data fetch."""
         httpx_mock.add_response(json=spo2_response)
 
@@ -123,9 +121,7 @@ class TestBiosensingSpO2:
         httpx_mock.add_response(json=[])
 
         async with PolarFlow(access_token="test_token") as client:
-            await client.biosensing.get_spo2(
-                from_date="2024-01-01", to_date="2024-01-07"
-            )
+            await client.biosensing.get_spo2(from_date="2024-01-01", to_date="2024-01-07")
 
         request = httpx_mock.get_request()
         assert "from=2024-01-01" in str(request.url)
@@ -155,9 +151,7 @@ class TestBiosensingECG:
     """Tests for ECG endpoint."""
 
     @pytest.mark.asyncio
-    async def test_get_ecg_success(
-        self, httpx_mock: HTTPXMock, ecg_response: list[dict]
-    ) -> None:
+    async def test_get_ecg_success(self, httpx_mock: HTTPXMock, ecg_response: list[dict]) -> None:
         """Test successful ECG data fetch."""
         httpx_mock.add_response(json=ecg_response)
 
@@ -199,9 +193,7 @@ class TestBiosensingTemperature:
         assert len(results[0].samples) == 3
 
     @pytest.mark.asyncio
-    async def test_body_temp_computed_properties(
-        self, body_temp_response: list[dict]
-    ) -> None:
+    async def test_body_temp_computed_properties(self, body_temp_response: list[dict]) -> None:
         """Test body temperature computed properties."""
         result = BodyTemperaturePeriod.model_validate(body_temp_response[0])
 
@@ -227,9 +219,7 @@ class TestBiosensingTemperature:
         assert results[0].sleep_time_skin_temperature_celsius == 35.8
 
     @pytest.mark.asyncio
-    async def test_skin_temp_elevation_detection(
-        self, skin_temp_response: list[dict]
-    ) -> None:
+    async def test_skin_temp_elevation_detection(self, skin_temp_response: list[dict]) -> None:
         """Test skin temperature elevation detection."""
         normal = SkinTemperature.model_validate(skin_temp_response[0])
         elevated = SkinTemperature.model_validate(skin_temp_response[1])

@@ -19,21 +19,31 @@ class SleepData(BaseModel):
     sleep_start_time: dt.datetime = Field(description="When sleep started")
     sleep_end_time: dt.datetime = Field(description="When sleep ended")
     device_id: str = Field(description="Device ID that recorded the sleep")
-    continuity: float = Field(description="Sleep continuity score (0.0-5.0, 0=no data)", ge=0.0, le=5.0)
-    continuity_class: int = Field(description="Sleep continuity classification (0-5, 0=no data)", ge=0, le=5)
+    continuity: float = Field(
+        description="Sleep continuity score (0.0-5.0, 0=no data)", ge=0.0, le=5.0
+    )
+    continuity_class: int = Field(
+        description="Sleep continuity classification (0-5, 0=no data)", ge=0, le=5
+    )
     light_sleep: int = Field(description="Light sleep duration in seconds", ge=0)
     deep_sleep: int = Field(description="Deep sleep duration in seconds", ge=0)
     rem_sleep: int = Field(description="REM sleep duration in seconds", ge=0)
     unrecognized_sleep_stage: int = Field(
         description="Unrecognized sleep stage duration in seconds", ge=0
     )
-    sleep_score: int = Field(description="Overall sleep quality score (0-100, 0=no data)", ge=0, le=100)
+    sleep_score: int = Field(
+        description="Overall sleep quality score (0-100, 0=no data)", ge=0, le=100
+    )
     total_interruption_duration: int = Field(
         description="Total interruption duration in seconds", ge=0
     )
-    sleep_charge: int | None = Field(default=None, description="Sleep charge score (-1=unavailable, 1-100)", ge=-1, le=100)
+    sleep_charge: int | None = Field(
+        default=None, description="Sleep charge score (-1=unavailable, 1-100)", ge=-1, le=100
+    )
     sleep_goal: int | None = Field(default=None, description="Sleep goal in seconds", ge=0)
-    sleep_rating: int | None = Field(default=None, description="User's subjective sleep rating (0-5, 0=not rated)", ge=0, le=5)
+    sleep_rating: int | None = Field(
+        default=None, description="User's subjective sleep rating (0-5, 0=not rated)", ge=0, le=5
+    )
     short_interruption_duration: int | None = Field(
         default=None, description="Short interruption duration in seconds", ge=0
     )
@@ -41,15 +51,20 @@ class SleepData(BaseModel):
         default=None, description="Long interruption duration in seconds", ge=0
     )
     sleep_cycles: int | None = Field(default=None, description="Number of sleep cycles", ge=0)
-    group_duration_score: float | None = Field(default=None, description="Group duration score", ge=0.0, le=100.0)
-    group_solidity_score: float | None = Field(default=None, description="Group solidity score", ge=0.0, le=100.0)
+    group_duration_score: float | None = Field(
+        default=None, description="Group duration score", ge=0.0, le=100.0
+    )
+    group_solidity_score: float | None = Field(
+        default=None, description="Group solidity score", ge=0.0, le=100.0
+    )
     group_regeneration_score: float | None = Field(
         default=None, description="Group regeneration score", ge=0.0, le=100.0
     )
 
     # Sample data (time → value mappings)
     hypnogram: dict[str, int] | None = Field(
-        default=None, description="Hypnogram data (time → sleep stage mapping: 0=awake, 1=light, 3=deep, 4=REM)"
+        default=None,
+        description="Hypnogram data (time → sleep stage mapping: 0=awake, 1=light, 3=deep, 4=REM)",
     )
     heart_rate_samples: dict[str, int] | None = Field(
         default=None, description="Heart rate samples (time → BPM mapping, ~5 min intervals)"
