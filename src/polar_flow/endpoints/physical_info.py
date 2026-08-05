@@ -2,21 +2,32 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING
 
-from polar_flow.models.physical_info import PhysicalInformation, PhysicalInfoTransaction
+from polar_flow.models.physical_info import (
+    PhysicalInformation,
+    PhysicalInfoTransaction,
+    UserPhysicalInfo,
+)
 
 if TYPE_CHECKING:
     from polar_flow.client import PolarFlow
 
+_TRANSACTION_DEPRECATION = (
+    "The transactional physical-info flow was deprecated by Polar "
+    "(AccessLink changelog 13.01.2026). Use PhysicalInfoEndpoint.get() instead."
+)
+
 
 class PhysicalInfoEndpoint:
-    """Physical information endpoint with transaction-based access.
+    """Physical information endpoint.
 
-    Physical information uses a transaction pattern:
-    1. Create transaction
-    2. List/get physical information within transaction
-    3. Commit transaction to mark data as retrieved
+    Use :meth:`get` to fetch the user's current physical information via the
+    non-transactional ``GET /v3/users/physical-info`` endpoint.
+
+    The transaction-based methods remain for backwards compatibility but the
+    underlying API endpoints were deprecated by Polar (13.01.2026 changelog).
     """
 
     def __init__(self, client: PolarFlow) -> None:
@@ -27,8 +38,36 @@ class PhysicalInfoEndpoint:
         """
         self.client = client
 
+    async def get(self) -> UserPhysicalInfo:
+        """Get the user's current physical information.
+
+        Uses the non-transactional endpoint added to AccessLink on
+        13.01.2026. The user is identified by the access token.
+
+        Returns:
+            Current physical information (weight, height, VO2 max,
+            resting/max heart rate, aerobic/anaerobic thresholds, ...)
+
+        Raises:
+            AuthenticationError: If access token is invalid
+            NotFoundError: If no physical information exists
+
+        Example:
+            ```python
+            async with PolarFlow(access_token="token") as client:
+                info = await client.physical_info.get()
+                print(f"VO2 max: {info.vo2_max}")
+                print(f"Resting HR: {info.resting_heart_rate}")
+            ```
+        """
+        path = "/v3/users/physical-info"
+        return await self.client._request("GET", path, response_model=UserPhysicalInfo)
+
     async def create_transaction(self, user_id: int | str) -> PhysicalInfoTransaction | None:
         """Create transaction to access new physical information.
+
+        .. deprecated:: 1.5.0
+            Deprecated by Polar. Use :meth:`get` instead.
 
         Args:
             user_id: Polar user ID
@@ -39,6 +78,7 @@ class PhysicalInfoEndpoint:
         Raises:
             NotFoundError: If user not found
         """
+        warnings.warn(_TRANSACTION_DEPRECATION, DeprecationWarning, stacklevel=2)
         path = f"/v3/users/{user_id}/physical-information-transactions"
         response = await self.client._request("POST", path)
 
@@ -101,6 +141,9 @@ class PhysicalInfoEndpoint:
         """Convenience method to get all new physical information.
 
         This creates a transaction, retrieves all physical info, and commits.
+
+        .. deprecated:: 1.5.0
+            Deprecated by Polar. Use :meth:`get` instead.
 
         Args:
             user_id: Polar user ID

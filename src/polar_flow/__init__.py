@@ -28,15 +28,16 @@ from polar_flow.models.exercise import (
     ExerciseSamples,
     ExerciseZones,
     HeartRateZone,
+    RoutePoint,
 )
-from polar_flow.models.physical_info import PhysicalInformation
+from polar_flow.models.physical_info import PhysicalInformation, UserPhysicalInfo
 from polar_flow.models.recharge import NightlyRecharge
 from polar_flow.models.sleep import SleepData
 from polar_flow.models.sleepwise_alertness import AlertnessHourlyData, SleepWiseAlertness
 from polar_flow.models.sleepwise_bedtime import SleepWiseBedtime
 from polar_flow.models.user import UserInfo
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 __all__ = [
     "Activity",
     "ActivitySamples",
@@ -64,6 +65,7 @@ __all__ = [
     "PolarFlow",
     "PolarFlowError",
     "RateLimitError",
+    "RoutePoint",
     "SkinTemperature",
     "SleepData",
     "SleepWiseAlertness",
@@ -73,6 +75,7 @@ __all__ = [
     "StepSample",
     "TemperatureSample",
     "UserInfo",
+    "UserPhysicalInfo",
     "ValidationError",
     "load_token_from_file",
 ]

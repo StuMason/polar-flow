@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-08-05
+
+### Added
+- Non-transactional physical info: `client.physical_info.get()` → `GET /v3/users/physical-info`
+  (added to AccessLink 13.01.2026) with new `UserPhysicalInfo` model (VO2 max, resting/max HR,
+  aerobic/anaerobic thresholds, training background, typical day, sleep goal)
+- Exercise detail via query flags: `exercises.get(id, samples=True, zones=True, route=True)` and
+  the same flags on `exercises.list()`; `Exercise` gains optional `heart_rate_zones`, `samples`
+  and `route` fields
+- `exercises.get_route()` returning structured GPS points (`RoutePoint` model)
+- `exercises.export_fit()` — FIT binary export
+
+### Fixed
+- `exercises.get_samples()` and `exercises.get_zones()` called `/samples` and `/zones` sub-paths
+  that only exist on the deprecated transaction flow and 404 for hashed exercise IDs; both now
+  use the documented `samples=true` / `zones=true` query parameters
+
+### Deprecated
+- The transaction-based physical-info flow (`create_transaction`, `list_physical_info`,
+  `get_physical_info`, `commit_transaction`, `get_all`) — deprecated by Polar in the
+  13.01.2026 AccessLink changelog; use `physical_info.get()` instead
+
 ## [1.3.0] - 2026-01-10
 
 ### Added - Complete V3 API Coverage
