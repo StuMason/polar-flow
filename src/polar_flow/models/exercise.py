@@ -7,10 +7,30 @@ import datetime as dt
 from pydantic import BaseModel, ConfigDict, Field, computed_field, field_validator
 
 
+class RoutePoint(BaseModel):
+    """Single GPS route point from an exercise.
+
+    Returned inline when an exercise is fetched with ``route=true``.
+    """
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    latitude: float = Field(description="Latitude in decimal degrees")
+    longitude: float = Field(description="Longitude in decimal degrees")
+    time: str | None = Field(
+        default=None, description="Offset from exercise start (ISO 8601 duration)"
+    )
+    satellites: int | None = Field(default=None, description="Number of satellites in fix")
+    fix: int | None = Field(default=None, description="GPS fix quality indicator")
+
+
 class Exercise(BaseModel):
     """Exercise (training session) data.
 
     Represents a single training session/workout from a Polar device.
+    Optional detail fields (``heart_rate_zones``, ``samples``, ``route``)
+    are populated only when requested via the ``zones`` / ``samples`` /
+    ``route`` query flags.
     """
 
     model_config = ConfigDict(populate_by_name=True)
@@ -72,6 +92,19 @@ class Exercise(BaseModel):
         default=None,
         alias="training-load-pro",
         description="Training Load Pro data (cardio, muscle, perceived). Values can be floats or strings like 'NOT_AVAILABLE'.",
+    )
+    heart_rate_zones: list[HeartRateZone] | None = Field(
+        default=None,
+        alias="heart-rate-zones",
+        description="Time-in-zone breakdown; present only when fetched with zones=true",
+    )
+    samples: list[ExerciseSample] | None = Field(
+        default=None,
+        description="Raw sample series (HR, speed, ...); present only when fetched with samples=true",
+    )
+    route: list[RoutePoint] | None = Field(
+        default=None,
+        description="GPS route points; present only when fetched with route=true",
     )
 
     @field_validator("upload_time", "start_time", mode="before")
@@ -256,3 +289,7 @@ class ExerciseZones(BaseModel):
             Total time in seconds
         """
         return sum(zone.in_zone_seconds for zone in self.zones)
+
+
+# Exercise references ExerciseSample/HeartRateZone, which are defined below it
+Exercise.model_rebuild()

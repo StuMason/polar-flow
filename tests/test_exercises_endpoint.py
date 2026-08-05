@@ -7,6 +7,20 @@ from polar_flow.client import PolarFlow
 from polar_flow.exceptions import AuthenticationError, NotFoundError, PolarFlowError
 
 
+def _base_exercise(exercise_id: str) -> dict[str, object]:
+    """Minimal valid exercise payload for detail-flag tests."""
+    return {
+        "id": exercise_id,
+        "upload-time": "2026-01-09T10:00:00Z",
+        "polar-user": "https://www.polaraccesslink.com/v3/users/1",
+        "device": "Polar Vantage V2",
+        "start-time": "2026-01-09T08:00:00Z",
+        "start-time-utc-offset": 60,
+        "duration": "PT1H",
+        "sport": "RUNNING",
+    }
+
+
 @pytest.mark.asyncio
 class TestExercisesEndpoint:
     """Tests for exercises endpoint."""
@@ -141,10 +155,11 @@ class TestExercisesEndpoint:
                 await client.exercises.get(exercise_id="999")
 
     async def test_get_samples(self, httpx_mock: HTTPXMock) -> None:
-        """Test getting exercise samples."""
+        """Test getting exercise samples via the samples=true query flag."""
         httpx_mock.add_response(
-            url="https://www.polaraccesslink.com/v3/exercises/123/samples",
+            url="https://www.polaraccesslink.com/v3/exercises/123?samples=true",
             json={
+                **_base_exercise("123"),
                 "samples": [
                     {
                         "sample-type": "HEARTRATE",
@@ -161,7 +176,7 @@ class TestExercisesEndpoint:
                         "recording-rate": 1,
                         "data": [85, 87, 88, 90],
                     },
-                ]
+                ],
             },
         )
 
@@ -182,8 +197,8 @@ class TestExercisesEndpoint:
     async def test_get_samples_empty(self, httpx_mock: HTTPXMock) -> None:
         """Test getting samples when none available."""
         httpx_mock.add_response(
-            url="https://www.polaraccesslink.com/v3/exercises/123/samples",
-            json={"samples": []},
+            url="https://www.polaraccesslink.com/v3/exercises/123?samples=true",
+            json=_base_exercise("123"),
         )
 
         async with PolarFlow(access_token="test_token_1234567890") as client:
@@ -192,16 +207,17 @@ class TestExercisesEndpoint:
         assert len(samples.samples) == 0
 
     async def test_get_zones(self, httpx_mock: HTTPXMock) -> None:
-        """Test getting heart rate zones."""
+        """Test getting heart rate zones via the zones=true query flag."""
         httpx_mock.add_response(
-            url="https://www.polaraccesslink.com/v3/exercises/123/zones",
+            url="https://www.polaraccesslink.com/v3/exercises/123?zones=true",
             json={
-                "zone": [
+                **_base_exercise("123"),
+                "heart_rate_zones": [
                     {"index": 1, "lower-limit": 100, "upper-limit": 120, "in-zone": "PT5M"},
                     {"index": 2, "lower-limit": 120, "upper-limit": 140, "in-zone": "PT15M"},
                     {"index": 3, "lower-limit": 140, "upper-limit": 160, "in-zone": "PT20M"},
                     {"index": 4, "lower-limit": 160, "upper-limit": 180, "in-zone": "PT10M"},
-                ]
+                ],
             },
         )
 
@@ -217,14 +233,107 @@ class TestExercisesEndpoint:
     async def test_get_zones_empty(self, httpx_mock: HTTPXMock) -> None:
         """Test getting zones when none available."""
         httpx_mock.add_response(
-            url="https://www.polaraccesslink.com/v3/exercises/123/zones",
-            json={"zone": []},
+            url="https://www.polaraccesslink.com/v3/exercises/123?zones=true",
+            json=_base_exercise("123"),
         )
 
         async with PolarFlow(access_token="test_token_1234567890") as client:
             zones = await client.exercises.get_zones(exercise_id="123")
 
         assert len(zones.zones) == 0
+
+    async def test_get_route(self, httpx_mock: HTTPXMock) -> None:
+        """Test getting GPS route via the route=true query flag."""
+        httpx_mock.add_response(
+            url="https://www.polaraccesslink.com/v3/exercises/123?route=true",
+            json={
+                **_base_exercise("123"),
+                "route": [
+                    {
+                        "latitude": 60.21982833,
+                        "longitude": 25.13925,
+                        "time": "PT0S",
+                        "satellites": 4,
+                        "fix": 1,
+                    },
+                    {
+                        "latitude": 60.21985,
+                        "longitude": 25.13930,
+                        "time": "PT5S",
+                        "satellites": 5,
+                        "fix": 1,
+                    },
+                ],
+            },
+        )
+
+        async with PolarFlow(access_token="test_token_1234567890") as client:
+            route = await client.exercises.get_route(exercise_id="123")
+
+        assert len(route) == 2
+        assert route[0].latitude == 60.21982833
+        assert route[1].satellites == 5
+
+    async def test_get_route_empty(self, httpx_mock: HTTPXMock) -> None:
+        """Test getting route when exercise has none."""
+        httpx_mock.add_response(
+            url="https://www.polaraccesslink.com/v3/exercises/123?route=true",
+            json=_base_exercise("123"),
+        )
+
+        async with PolarFlow(access_token="test_token_1234567890") as client:
+            route = await client.exercises.get_route(exercise_id="123")
+
+        assert route == []
+
+    async def test_get_with_all_detail_flags(self, httpx_mock: HTTPXMock) -> None:
+        """Test one call fetching samples, zones and route inline."""
+        httpx_mock.add_response(
+            url="https://www.polaraccesslink.com/v3/exercises/123?samples=true&zones=true&route=true",
+            json={
+                **_base_exercise("123"),
+                "samples": [{"sample-type": "HEARTRATE", "recording-rate": 5, "data": [120, 125]}],
+                "heart_rate_zones": [
+                    {"index": 1, "lower-limit": 100, "upper-limit": 120, "in-zone": "PT5M"}
+                ],
+                "route": [{"latitude": 60.0, "longitude": 25.0}],
+            },
+        )
+
+        async with PolarFlow(access_token="test_token_1234567890") as client:
+            exercise = await client.exercises.get(
+                exercise_id="123", samples=True, zones=True, route=True
+            )
+
+        assert exercise.samples is not None and len(exercise.samples) == 1
+        assert exercise.heart_rate_zones is not None
+        assert exercise.heart_rate_zones[0].in_zone_minutes == 5.0
+        assert exercise.route is not None
+        assert exercise.route[0].latitude == 60.0
+
+    async def test_export_fit(self, httpx_mock: HTTPXMock) -> None:
+        """Test exporting exercise as FIT (binary)."""
+        fit_bytes = b"\x0e\x10\x98\x00FIT-binary-payload"
+        httpx_mock.add_response(
+            url="https://www.polaraccesslink.com/v3/exercises/123/fit",
+            content=fit_bytes,
+        )
+
+        async with PolarFlow(access_token="test_token_1234567890") as client:
+            fit_data = await client.exercises.export_fit(exercise_id="123")
+
+        assert fit_data == fit_bytes
+
+    async def test_export_fit_not_found(self, httpx_mock: HTTPXMock) -> None:
+        """Test FIT export for missing exercise."""
+        httpx_mock.add_response(
+            url="https://www.polaraccesslink.com/v3/exercises/999/fit",
+            status_code=404,
+        )
+
+        async with PolarFlow(access_token="test_token_1234567890") as client:
+            with pytest.raises(NotFoundError):
+                await client.exercises.export_fit(exercise_id="999")
 
     async def test_export_tcx(self, httpx_mock: HTTPXMock) -> None:
         """Test exporting exercise as TCX."""
