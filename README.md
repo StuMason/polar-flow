@@ -128,7 +128,7 @@ exercise = await client.exercises.get(exercise_id="123")
 
 # Get exercise samples (HR, speed, cadence, altitude)
 samples = await client.exercises.get_samples(exercise_id="123")
-hr_sample = samples.get_sample_by_type("HEARTRATE")
+hr_sample = samples.get_sample_by_type("0")  # 0 = heart rate
 if hr_sample:
     print(f"HR values: {hr_sample.values[:10]}")  # First 10 values
 

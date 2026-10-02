@@ -114,7 +114,7 @@ async def main() -> None:
                 print(f"    First values: {values}")
 
         # Get heart rate zones
-        hr_sample = samples.get_sample_by_type("HEARTRATE")
+        hr_sample = samples.get_sample_by_type("0")  # 0 = heart rate
         if hr_sample:
             print("\n" + "=" * 60)
             print("Heart rate zones")

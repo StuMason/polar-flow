@@ -162,17 +162,17 @@ class TestExercisesEndpoint:
                 **_base_exercise("123"),
                 "samples": [
                     {
-                        "sample-type": "HEARTRATE",
+                        "sample-type": 0,
                         "recording-rate": 5,
                         "data": [120, 125, 130, 135, 140, 145],
                     },
                     {
-                        "sample-type": "SPEED",
+                        "sample-type": 1,
                         "recording-rate": 1,
                         "data": ["5.5", "6.0", "6.5", "7.0"],
                     },
                     {
-                        "sample-type": "CADENCE",
+                        "sample-type": 2,
                         "recording-rate": 1,
                         "data": [85, 87, 88, 90],
                     },
@@ -185,12 +185,12 @@ class TestExercisesEndpoint:
 
         assert len(samples.samples) == 3
 
-        hr_sample = samples.get_sample_by_type("HEARTRATE")
+        hr_sample = samples.get_sample_by_type("0")
         assert hr_sample is not None
         assert hr_sample.recording_rate == 5
         assert len(hr_sample.values) == 6
 
-        speed_sample = samples.get_sample_by_type("SPEED")
+        speed_sample = samples.get_sample_by_type("1")
         assert speed_sample is not None
         assert len(speed_sample.values) == 4
 
@@ -213,10 +213,10 @@ class TestExercisesEndpoint:
             json={
                 **_base_exercise("123"),
                 "heart_rate_zones": [
-                    {"index": 1, "lower-limit": 100, "upper-limit": 120, "in-zone": "PT5M"},
-                    {"index": 2, "lower-limit": 120, "upper-limit": 140, "in-zone": "PT15M"},
-                    {"index": 3, "lower-limit": 140, "upper-limit": 160, "in-zone": "PT20M"},
-                    {"index": 4, "lower-limit": 160, "upper-limit": 180, "in-zone": "PT10M"},
+                    {"index": 0, "lower-limit": 100, "upper-limit": 120, "in-zone": "PT5M"},
+                    {"index": 1, "lower-limit": 120, "upper-limit": 140, "in-zone": "PT15M"},
+                    {"index": 2, "lower-limit": 140, "upper-limit": 160, "in-zone": "PT20M"},
+                    {"index": 3, "lower-limit": 160, "upper-limit": 180, "in-zone": "PT10M"},
                 ],
             },
         )
@@ -225,9 +225,9 @@ class TestExercisesEndpoint:
             zones = await client.exercises.get_zones(exercise_id="123")
 
         assert len(zones.zones) == 4
-        assert zones.zones[0].index == 1
+        assert zones.zones[0].index == 0
         assert zones.zones[0].in_zone_minutes == 5.0
-        assert zones.zones[2].index == 3
+        assert zones.zones[2].index == 2
         assert zones.zones[2].in_zone_minutes == 20.0
 
     async def test_get_zones_empty(self, httpx_mock: HTTPXMock) -> None:
@@ -292,9 +292,9 @@ class TestExercisesEndpoint:
             url="https://www.polaraccesslink.com/v3/exercises/123?samples=true&zones=true&route=true",
             json={
                 **_base_exercise("123"),
-                "samples": [{"sample-type": "HEARTRATE", "recording-rate": 5, "data": [120, 125]}],
+                "samples": [{"sample-type": 0, "recording-rate": 5, "data": [120, 125]}],
                 "heart_rate_zones": [
-                    {"index": 1, "lower-limit": 100, "upper-limit": 120, "in-zone": "PT5M"}
+                    {"index": 0, "lower-limit": 100, "upper-limit": 120, "in-zone": "PT5M"}
                 ],
                 "route": [{"latitude": 60.0, "longitude": 25.0}],
             },
@@ -310,6 +310,34 @@ class TestExercisesEndpoint:
         assert exercise.heart_rate_zones[0].in_zone_minutes == 5.0
         assert exercise.route is not None
         assert exercise.route[0].latitude == 60.0
+
+    async def test_get_live_wire_format(self, httpx_mock: HTTPXMock) -> None:
+        """Regression: live API sends integer sample-type, 0-based zones, NULL RR samples."""
+        httpx_mock.add_response(
+            url="https://www.polaraccesslink.com/v3/exercises/123?samples=true&zones=true",
+            json={
+                **_base_exercise("123"),
+                "samples": [
+                    {"sample-type": 0, "recording-rate": 1, "data": "120,121,122"},
+                    {"sample-type": 11, "recording-rate": 0, "data": [812, None, 790]},
+                ],
+                "heart_rate_zones": [
+                    {"index": 0, "lower-limit": 95, "upper-limit": 114, "in-zone": "PT1M"},
+                    {"index": 4, "lower-limit": 171, "upper-limit": 190, "in-zone": "PT0S"},
+                ],
+            },
+        )
+
+        async with PolarFlow(access_token="test_token_1234567890") as client:
+            exercise = await client.exercises.get(exercise_id="123", samples=True, zones=True)
+
+        assert exercise.samples is not None
+        assert exercise.samples[0].sample_type == "0"
+        assert exercise.samples[0].values == [120.0, 121.0, 122.0]
+        assert exercise.samples[1].sample_type == "11"
+        assert exercise.samples[1].values == [812, None, 790]
+        assert exercise.heart_rate_zones is not None
+        assert [z.index for z in exercise.heart_rate_zones] == [0, 4]
 
     async def test_export_fit(self, httpx_mock: HTTPXMock) -> None:
         """Test exporting exercise as FIT (binary)."""

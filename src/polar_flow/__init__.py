@@ -37,7 +37,7 @@ from polar_flow.models.sleepwise_alertness import AlertnessHourlyData, SleepWise
 from polar_flow.models.sleepwise_bedtime import SleepWiseBedtime
 from polar_flow.models.user import UserInfo
 
-__version__ = "1.5.0"
+__version__ = "1.5.1"
 __all__ = [
     "Activity",
     "ActivitySamples",

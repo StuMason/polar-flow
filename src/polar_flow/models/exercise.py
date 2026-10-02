@@ -190,16 +190,25 @@ class ExerciseSample(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     sample_type: str = Field(
-        alias="sample-type", description="Type of sample (e.g., 'HEARTRATE', 'SPEED')"
+        alias="sample-type",
+        description="Sample type key ('0' heart rate, '1' speed, ... '11' RR interval)",
     )
     recording_rate: int = Field(
         alias="recording-rate", description="Sample recording rate in seconds"
     )
-    values: list[float | str] = Field(alias="data", description="Sample values")
+    values: list[float | str | None] = Field(
+        alias="data", description="Sample values (RR interval samples may contain None)"
+    )
+
+    @field_validator("sample_type", mode="before")
+    @classmethod
+    def convert_sample_type(cls, value: int | str) -> str:
+        """Accept the integer key the live API sends; docs define it as a string."""
+        return str(value)
 
     @field_validator("values", mode="before")
     @classmethod
-    def convert_values(cls, value: list[float | str] | str) -> list[float | str]:
+    def convert_values(cls, value: list[float | str | None] | str) -> list[float | str | None]:
         """Convert values to list if needed.
 
         Args:
@@ -222,7 +231,7 @@ class ExerciseSamples(BaseModel):
         """Get sample by type.
 
         Args:
-            sample_type: Sample type to find (e.g., 'HEARTRATE')
+            sample_type: Sample type to find (e.g., '0' for heart rate)
 
         Returns:
             Sample or None if not found
@@ -238,7 +247,7 @@ class HeartRateZone(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
-    index: int = Field(description="Zone index (1-5)", ge=1, le=5)
+    index: int = Field(description="Zone index (0-based from the live API)", ge=0)
     lower_limit: int = Field(alias="lower-limit", description="Lower HR limit in BPM", ge=0)
     upper_limit: int = Field(alias="upper-limit", description="Upper HR limit in BPM", ge=0)
     in_zone: str = Field(alias="in-zone", description="Time in zone (ISO 8601 duration)")
