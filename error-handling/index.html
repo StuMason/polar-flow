@@ -1,0 +1,1375 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Modern async Python client for Polar AccessLink API">
+      
+      
+      
+        <link rel="canonical" href="https://stumason.github.io/polar-flow/error-handling/">
+      
+      
+        <link rel="prev" href="../api/exceptions/">
+      
+      
+        <link rel="next" href="../advanced/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Error Handling - polar-flow</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#error-handling" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="polar-flow" class="md-header__button md-logo" aria-label="polar-flow" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            polar-flow
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Error Handling
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/StuMason/polar-flow" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    StuMason/polar-flow
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="polar-flow" class="md-nav__button md-logo" aria-label="polar-flow" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    polar-flow
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/StuMason/polar-flow" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    StuMason/polar-flow
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Endpoints
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Endpoints
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/sleep/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sleep
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/activity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Activity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/recharge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recharge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Users
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/physical_info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Physical Info
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exceptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#exception-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Attributes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exception Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authenticationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AuthenticationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notfounderror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NotFoundError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ratelimiterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RateLimitError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ValidationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#graceful-degradation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graceful Degradation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retry-with-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry with Backoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#production-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production Recommendations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#exception-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Attributes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exception Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authenticationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AuthenticationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notfounderror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NotFoundError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ratelimiterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RateLimitError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ValidationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#graceful-degradation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graceful Degradation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retry-with-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry with Backoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#production-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production Recommendations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="error-handling">Error Handling</h1>
+<p>All errors inherit from <code>PolarFlowError</code>.</p>
+<h2 id="exception-hierarchy">Exception Hierarchy</h2>
+<div class="highlight"><pre><span></span><code>PolarFlowError (base)
+├── AuthenticationError (401)
+├── NotFoundError (404)
+├── RateLimitError (429)
+└── ValidationError (400/422)
+</code></pre></div>
+<h2 id="exception-attributes">Exception Attributes</h2>
+<p>All exceptions have these attributes:</p>
+<ul>
+<li><code>endpoint: str | None</code> - API endpoint that failed</li>
+<li><code>status_code: int | None</code> - HTTP status code</li>
+<li><code>response_body: str | None</code> - Response body (truncated to 500 chars)</li>
+</ul>
+<p><code>RateLimitError</code> additionally has:</p>
+<ul>
+<li><code>retry_after: int</code> - Seconds to wait before retrying</li>
+</ul>
+<h2 id="exception-types">Exception Types</h2>
+<h3 id="authenticationerror">AuthenticationError</h3>
+<p><strong>When raised:</strong></p>
+<ul>
+<li>Token is invalid or expired (401 Unauthorized)</li>
+<li>Token has been revoked by user</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticationError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">sleep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">AuthenticationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Authentication failed at </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Token expired. Re-run &#39;polar-flow auth&#39; to get a new token.&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Re-run <code>polar-flow auth</code> to get a new access token</li>
+<li>Check that your token hasn't been revoked in the Polar dashboard</li>
+</ul>
+<h3 id="notfounderror">NotFoundError</h3>
+<p><strong>When raised:</strong></p>
+<ul>
+<li>Resource doesn't exist (404 Not Found)</li>
+<li>Sleep data not yet processed (usually available by 10am)</li>
+<li>Requesting future dates</li>
+<li>No data recorded for that date</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotFoundError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">sleep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="s2">&quot;2026-01-09&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">NotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No data found: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Endpoint: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Status: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Check if the date is valid and in the past</li>
+<li>For sleep data, wait until later in the day (Polar processes sleep data in the morning)</li>
+<li>Verify you have data recorded for that date in the Polar Flow app</li>
+</ul>
+<h3 id="ratelimiterror">RateLimitError</h3>
+<p><strong>When raised:</strong></p>
+<ul>
+<li>Too many requests too quickly (429 Too Many Requests)</li>
+<li>Polar API enforces rate limits per user</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">RateLimitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Retry after </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">retry_after</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">retry_after</span><span class="p">)</span>
+    <span class="c1"># Retry the request</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Implement backoff logic using the <code>retry_after</code> attribute</li>
+<li>Reduce request frequency</li>
+<li>Batch operations when possible</li>
+</ul>
+<h3 id="validationerror">ValidationError</h3>
+<p><strong>When raised:</strong></p>
+<ul>
+<li>Invalid request parameters (400/422)</li>
+<li>Invalid date format (must be YYYY-MM-DD)</li>
+<li>Date out of range (max 28-30 days history)</li>
+<li>Invalid exercise ID or other identifiers</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">sleep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="s2">&quot;01-09-2026&quot;</span><span class="p">)</span>  <span class="c1"># Wrong format</span>
+<span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid request: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Details: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">response_body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Solutions:</strong></p>
+<ul>
+<li>Use YYYY-MM-DD format for dates</li>
+<li>Check parameter ranges and constraints</li>
+<li>Read the error message details in <code>response_body</code></li>
+</ul>
+<h2 id="common-patterns">Common Patterns</h2>
+<h3 id="graceful-degradation">Graceful Degradation</h3>
+<p>Handle missing data gracefully:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotFoundError</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_sleep_safe</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">NotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># No data for this date</span>
+
+<span class="c1"># Use it</span>
+<span class="n">sleep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_sleep_safe</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;2026-01-09&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">sleep</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sleep score: </span><span class="si">{</span><span class="n">sleep</span><span class="o">.</span><span class="n">sleep_score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No sleep data for this date&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="retry-with-backoff">Retry with Backoff</h3>
+<p>Handle rate limits with exponential backoff:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitError</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_with_retry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_retries</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">RateLimitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="n">max_retries</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span>  <span class="c1"># Max retries reached</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Waiting </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">retry_after</span><span class="si">}</span><span class="s2">s...&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">retry_after</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fetch_with_retry</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="logging-errors">Logging Errors</h3>
+<p>Log errors with full context:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlowError</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">sleep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PolarFlowError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;API error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">extra</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;endpoint&quot;</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span>
+            <span class="s2">&quot;status_code&quot;</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span>
+            <span class="s2">&quot;response_body&quot;</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">response_body</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="k">raise</span>
+</code></pre></div>
+<h2 id="production-recommendations">Production Recommendations</h2>
+<ol>
+<li><strong>Always use the async context manager</strong> to ensure proper cleanup:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">with</span> <span class="n">PolarFlow</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="c1"># Your code here</span>
+</code></pre></div>
+<ol>
+<li>
+<p><strong>Handle RateLimitError</strong> with proper backoff logic</p>
+</li>
+<li>
+<p><strong>Log errors</strong> with full context for debugging</p>
+</li>
+<li>
+<p><strong>Don't retry forever</strong> - set maximum retry limits</p>
+</li>
+<li>
+<p><strong>Handle NotFoundError gracefully</strong> - missing data is normal</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

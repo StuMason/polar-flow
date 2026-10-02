@@ -1,0 +1,1587 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Modern async Python client for Polar AccessLink API">
+      
+      
+      
+        <link rel="canonical" href="https://stumason.github.io/polar-flow/advanced/">
+      
+      
+        <link rel="prev" href="../error-handling/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Advanced Usage - polar-flow</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#advanced-usage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="polar-flow" class="md-header__button md-logo" aria-label="polar-flow" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            polar-flow
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Advanced Usage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="purple"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/StuMason/polar-flow" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    StuMason/polar-flow
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="polar-flow" class="md-nav__button md-logo" aria-label="polar-flow" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    polar-flow
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/StuMason/polar-flow" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    StuMason/polar-flow
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Endpoints
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Endpoints
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/sleep/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sleep
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/activity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Activity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/recharge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recharge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Users
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/physical_info/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Physical Info
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exceptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error-handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Usage
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#incremental-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental Sync
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bulk-data-fetching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bulk Data Fetching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limit-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate Limit Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#biosensing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Biosensing Data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-export-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Export Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Export Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-to-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to JSON
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export-to-csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to CSV
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduled-sync-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduled Sync Jobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#incremental-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incremental Sync
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bulk-data-fetching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bulk Data Fetching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limit-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate Limit Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#biosensing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Biosensing Data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-export-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Export Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Export Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-to-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to JSON
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export-to-csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to CSV
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduled-sync-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduled Sync Jobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database Integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="advanced-usage">Advanced Usage</h1>
+<p>Advanced patterns for building production applications with polar-flow.</p>
+<h2 id="incremental-sync">Incremental Sync</h2>
+<p>Fetch only new data since last sync using the <code>since=</code> parameter.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span><span class="p">,</span> <span class="n">load_token_from_file</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">sync_sleep_data</span><span class="p">(</span><span class="n">last_sync_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sync sleep data since last sync date.&quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">load_token_from_file</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">PolarFlow</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="c1"># Fetch only data since last sync</span>
+        <span class="n">new_sleep_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">since</span><span class="o">=</span><span class="n">last_sync_date</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fetched </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_sleep_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> new sleep records&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">sleep</span> <span class="ow">in</span> <span class="n">new_sleep_data</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">store_sleep_data</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">())</span>
+
+<span class="c1"># Run sync</span>
+<span class="n">last_sync</span> <span class="o">=</span> <span class="s2">&quot;2026-01-01&quot;</span>
+<span class="n">new_last_sync</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sync_sleep_data</span><span class="p">(</span><span class="n">last_sync</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="bulk-data-fetching">Bulk Data Fetching</h2>
+<p>Fetch all data types efficiently using parallel requests:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_all_data</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">PolarFlow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch all available data in one session.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Fetch in parallel using asyncio.gather</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">),</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">),</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">activity</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">),</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">exercises</span><span class="o">.</span><span class="n">list</span><span class="p">(),</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">cardio_load</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">),</span>
+        <span class="n">return_exceptions</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># Don&#39;t fail if one endpoint fails</span>
+    <span class="p">)</span>
+
+    <span class="n">sleep</span><span class="p">,</span> <span class="n">recharge</span><span class="p">,</span> <span class="n">activity</span><span class="p">,</span> <span class="n">exercises</span><span class="p">,</span> <span class="n">cardio</span> <span class="o">=</span> <span class="n">results</span>
+
+    <span class="c1"># Handle potential errors</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;sleep&quot;</span><span class="p">:</span> <span class="n">sleep</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sleep</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+        <span class="s2">&quot;recharge&quot;</span><span class="p">:</span> <span class="n">recharge</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">recharge</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+        <span class="s2">&quot;activity&quot;</span><span class="p">:</span> <span class="n">activity</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">activity</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+        <span class="s2">&quot;exercises&quot;</span><span class="p">:</span> <span class="n">exercises</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exercises</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+        <span class="s2">&quot;cardio_load&quot;</span><span class="p">:</span> <span class="n">cardio</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cardio</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+    <span class="p">}</span>
+</code></pre></div>
+<h2 id="rate-limit-handling">Rate Limit Handling</h2>
+<p>Implement sophisticated rate limit handling for production:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span><span class="p">,</span> <span class="n">RateLimitError</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RateLimitedClient</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">PolarFlow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_with_backoff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coro</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute coroutine with exponential backoff on rate limits.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">coro</span>
+            <span class="k">except</span> <span class="n">RateLimitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span>
+
+                <span class="n">wait_time</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">retry_after</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">attempt</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Waiting </span><span class="si">{</span><span class="n">wait_time</span><span class="si">}</span><span class="s2">s...&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span>
+
+<span class="c1"># Use it</span>
+<span class="k">async</span> <span class="k">with</span> <span class="n">PolarFlow</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">rl_client</span> <span class="o">=</span> <span class="n">RateLimitedClient</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+    <span class="n">sleep_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">rl_client</span><span class="o">.</span><span class="n">fetch_with_backoff</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div>
+<h2 id="biosensing-data">Biosensing Data</h2>
+<p>Fetch and process biosensing data (requires compatible device):</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_biosensing_data</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">PolarFlow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch all biosensing metrics.&quot;&quot;&quot;</span>
+
+    <span class="c1"># SpO2 - Blood oxygen</span>
+    <span class="n">spo2_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">biosensing</span><span class="o">.</span><span class="n">get_spo2</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spo2_data</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SpO2: </span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">blood_oxygen_percent</span><span class="si">}</span><span class="s2">% at </span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">test_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Class: </span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">spo2_class</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  HR: </span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">average_heart_rate_bpm</span><span class="si">}</span><span class="s2"> bpm&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  HRV: </span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">heart_rate_variability_ms</span><span class="si">}</span><span class="s2"> ms&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ECG - Electrocardiogram</span>
+    <span class="n">ecg_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">biosensing</span><span class="o">.</span><span class="n">get_ecg</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ecg_data</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ECG at </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">test_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  HR: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">average_heart_rate_bpm</span><span class="si">}</span><span class="s2"> bpm&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  HRV: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">heart_rate_variability_ms</span><span class="si">}</span><span class="s2"> ms (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">heart_rate_variability_level</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  RRI: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">rri_ms</span><span class="si">}</span><span class="s2"> ms&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">samples</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Samples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span><span class="si">}</span><span class="s2"> waveform points&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Body temperature</span>
+    <span class="n">body_temp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">biosensing</span><span class="o">.</span><span class="n">get_body_temperature</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">body_temp</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Body temp: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">start_time</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">end_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Avg: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">avg_temperature</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Min: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">min_temperature</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Max: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">max_temperature</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Skin temperature (nightly)</span>
+    <span class="n">skin_temp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">biosensing</span><span class="o">.</span><span class="n">get_skin_temperature</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">skin_temp</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skin temp (</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">sleep_date</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">sleep_time_skin_temperature_celsius</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">deviation_from_baseline_celsius</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Deviation: </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">deviation_from_baseline_celsius</span><span class="si">:</span><span class="s2">+.1f</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="data-export-patterns">Data Export Patterns</h2>
+<h3 id="export-to-json">Export to JSON</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">export_to_json</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">PolarFlow</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Export all data to JSON file.&quot;&quot;&quot;</span>
+    <span class="n">sleep_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+
+    <span class="c1"># Convert Pydantic models to dicts</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">sleep</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">sleep</span> <span class="ow">in</span> <span class="n">sleep_data</span><span class="p">]</span>
+
+    <span class="n">output_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exported </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> records to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="export-to-csv">Export to CSV</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">export_exercises_to_csv</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">PolarFlow</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Export exercises to CSV file.&quot;&quot;&quot;</span>
+    <span class="n">exercises</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">exercises</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">output_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span>
+            <span class="s2">&quot;Date&quot;</span><span class="p">,</span> <span class="s2">&quot;Sport&quot;</span><span class="p">,</span> <span class="s2">&quot;Duration (min)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Calories&quot;</span><span class="p">,</span> <span class="s2">&quot;Distance (km)&quot;</span><span class="p">,</span> <span class="s2">&quot;Avg HR&quot;</span>
+        <span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">ex</span> <span class="ow">in</span> <span class="n">exercises</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span>
+                <span class="n">ex</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="k">if</span> <span class="n">ex</span><span class="o">.</span><span class="n">start_time</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="n">ex</span><span class="o">.</span><span class="n">sport</span><span class="p">,</span>
+                <span class="n">ex</span><span class="o">.</span><span class="n">duration_minutes</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="n">ex</span><span class="o">.</span><span class="n">calories</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="n">ex</span><span class="o">.</span><span class="n">distance_km</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="n">ex</span><span class="o">.</span><span class="n">average_heart_rate</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exported </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">exercises</span><span class="p">)</span><span class="si">}</span><span class="s2"> exercises to </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="scheduled-sync-jobs">Scheduled Sync Jobs</h2>
+<p>Run periodic syncs with APScheduler:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">apscheduler.schedulers.asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncIOScheduler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span><span class="p">,</span> <span class="n">load_token_from_file</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">sync_job</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sync all data from Polar API.&quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">load_token_from_file</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">PolarFlow</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">sleep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Synced </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span><span class="si">}</span><span class="s2"> sleep records&quot;</span><span class="p">)</span>
+
+        <span class="n">recharge</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">recharge</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Synced </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">recharge</span><span class="p">)</span><span class="si">}</span><span class="s2"> recharge records&quot;</span><span class="p">)</span>
+
+        <span class="n">cardio</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">cardio_load</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Synced </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cardio</span><span class="p">)</span><span class="si">}</span><span class="s2"> cardio load records&quot;</span><span class="p">)</span>
+
+<span class="c1"># Setup scheduler</span>
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">AsyncIOScheduler</span><span class="p">()</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">add_job</span><span class="p">(</span><span class="n">sync_job</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Keep running</span>
+<span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</code></pre></div>
+<h2 id="database-integration">Database Integration</h2>
+<p>Store data in SQLite:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">aiosqlite</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span><span class="p">,</span> <span class="n">load_token_from_file</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">store_sleep_data</span><span class="p">(</span><span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch and store sleep data in SQLite.&quot;&quot;&quot;</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">load_token_from_file</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiosqlite</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">db</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            CREATE TABLE IF NOT EXISTS sleep (</span>
+<span class="s2">                date TEXT PRIMARY KEY,</span>
+<span class="s2">                sleep_score INTEGER,</span>
+<span class="s2">                total_sleep_seconds INTEGER,</span>
+<span class="s2">                deep_sleep_seconds INTEGER,</span>
+<span class="s2">                rem_sleep_seconds INTEGER,</span>
+<span class="s2">                hrv_avg REAL</span>
+<span class="s2">            )</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="n">PolarFlow</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="n">sleep_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">28</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">sleep</span> <span class="ow">in</span> <span class="n">sleep_data</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    INSERT OR REPLACE INTO sleep VALUES (?, ?, ?, ?, ?, ?)</span>
+<span class="s2">                &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span>
+                    <span class="n">sleep</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
+                    <span class="n">sleep</span><span class="o">.</span><span class="n">sleep_score</span><span class="p">,</span>
+                    <span class="n">sleep</span><span class="o">.</span><span class="n">total_sleep_seconds</span><span class="p">,</span>
+                    <span class="n">sleep</span><span class="o">.</span><span class="n">deep_sleep_seconds</span><span class="p">,</span>
+                    <span class="n">sleep</span><span class="o">.</span><span class="n">rem_sleep_seconds</span><span class="p">,</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">sleep</span><span class="p">,</span> <span class="s1">&#39;hrv_avg&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="p">))</span>
+
+        <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sleep_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> sleep records&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="error-recovery">Error Recovery</h2>
+<p>Implement robust error recovery:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span><span class="p">,</span> <span class="n">PolarFlowError</span><span class="p">,</span> <span class="n">NotFoundError</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">sync_with_recovery</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">PolarFlow</span><span class="p">,</span> <span class="n">dates</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sync data with error recovery.&quot;&quot;&quot;</span>
+    <span class="n">successful</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">failed</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sleep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">)</span>
+            <span class="n">successful</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">store_sleep</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">NotFoundError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No data for </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># Not an error - just no data</span>
+
+        <span class="k">except</span> <span class="n">PolarFlowError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to fetch </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">failed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Success: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">successful</span><span class="p">)</span><span class="si">}</span><span class="s2">, Failed: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">successful</span><span class="p">,</span> <span class="n">failed</span>
+</code></pre></div>
+<h2 id="testing">Testing</h2>
+<p>Mock the Polar API for testing:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">polar_flow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarFlow</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">test_sleep_fetch</span><span class="p">(</span><span class="n">httpx_mock</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test sleep data fetching.&quot;&quot;&quot;</span>
+    <span class="n">httpx_mock</span><span class="o">.</span><span class="n">add_response</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://www.polaraccesslink.com/v3/users/sleep&quot;</span><span class="p">,</span>
+        <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;nights&quot;</span><span class="p">:</span> <span class="p">[{</span>
+                <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-01-09&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sleep_score&quot;</span><span class="p">:</span> <span class="mi">85</span><span class="p">,</span>
+                <span class="s2">&quot;total_sleep_seconds&quot;</span><span class="p">:</span> <span class="mi">28800</span><span class="p">,</span>
+            <span class="p">}]</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">PolarFlow</span><span class="p">(</span><span class="n">access_token</span><span class="o">=</span><span class="s2">&quot;test_token&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">sleep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">sleep</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">sleep</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">sleep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sleep_score</span> <span class="o">==</span> <span class="mi">85</span>
+</code></pre></div>
+<h2 id="performance-tips">Performance Tips</h2>
+<ol>
+<li><strong>Use <code>since=</code> parameter</strong> for incremental syncs instead of fetching all data</li>
+<li><strong>Batch operations</strong> with <code>asyncio.gather()</code> when fetching multiple endpoints</li>
+<li><strong>Handle rate limits</strong> proactively - don't retry immediately</li>
+<li><strong>Cache token</strong> in memory if making multiple client instances</li>
+<li><strong>Use connection pooling</strong> - the async context manager handles this automatically</li>
+</ol>
+<h2 id="security-best-practices">Security Best Practices</h2>
+<ol>
+<li><strong>Never hardcode tokens</strong> - use environment variables or secure vaults</li>
+<li><strong>Rotate tokens regularly</strong> - re-authenticate periodically</li>
+<li><strong>Store tokens securely</strong> - use proper file permissions (600)</li>
+<li><strong>Don't log tokens</strong> - redact sensitive data from logs</li>
+<li><strong>Use HTTPS only</strong> - the client enforces this by default</li>
+</ol>
+<h2 id="device-compatibility">Device Compatibility</h2>
+<p>Not all Polar devices support all endpoints:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Vantage V3</th>
+<th>Vantage V2</th>
+<th>Grit X Pro</th>
+<th>Ignite 3</th>
+<th>Pacer Pro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sleep</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Recharge</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Cardio Load</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>SpO2</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>ECG</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<p>Biosensing features (SpO2, ECG, Temperature) require the Elixir sensor platform found in Vantage V3.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "content.code.copy", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
