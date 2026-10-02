@@ -137,7 +137,7 @@ class ExercisesEndpoint:
             ```python
             async with PolarFlow(access_token="token") as client:
                 samples = await client.exercises.get_samples(exercise_id="123")
-                hr_sample = samples.get_sample_by_type("HEARTRATE")
+                hr_sample = samples.get_sample_by_type("0")  # 0 = heart rate
                 if hr_sample:
                     print(f"HR values: {hr_sample.values[:5]}...")  # First 5 values
             ```

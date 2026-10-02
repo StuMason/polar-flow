@@ -376,12 +376,12 @@ class TestExerciseSample:
     def test_basic_sample(self) -> None:
         """Test basic sample creation."""
         sample = ExerciseSample(
-            sample_type="HEARTRATE",
+            sample_type="0",
             recording_rate=5,
             values=[120, 125, 130, 135, 140],
         )
 
-        assert sample.sample_type == "HEARTRATE"
+        assert sample.sample_type == "0"
         assert sample.recording_rate == 5
         assert len(sample.values) == 5
         assert sample.values[0] == 120
@@ -389,12 +389,12 @@ class TestExerciseSample:
     def test_sample_with_string_values(self) -> None:
         """Test sample with string values."""
         sample = ExerciseSample(
-            sample_type="SPEED",
+            sample_type="1",
             recording_rate=1,
             values=["5.5", "6.0", "6.5"],
         )
 
-        assert sample.sample_type == "SPEED"
+        assert sample.sample_type == "1"
         assert len(sample.values) == 3
 
 
@@ -406,12 +406,12 @@ class TestExerciseSamples:
         samples = ExerciseSamples(
             samples=[
                 {
-                    "sample-type": "HEARTRATE",
+                    "sample-type": "0",
                     "recording-rate": 5,
                     "data": [120, 125, 130],
                 },
                 {
-                    "sample-type": "SPEED",
+                    "sample-type": "1",
                     "recording-rate": 1,
                     "data": ["5.5", "6.0"],
                 },
@@ -419,29 +419,29 @@ class TestExerciseSamples:
         )
 
         assert len(samples.samples) == 2
-        assert samples.samples[0].sample_type == "HEARTRATE"
-        assert samples.samples[1].sample_type == "SPEED"
+        assert samples.samples[0].sample_type == "0"
+        assert samples.samples[1].sample_type == "1"
 
     def test_get_sample_by_type_found(self) -> None:
         """Test getting sample by type when it exists."""
         samples = ExerciseSamples(
             samples=[
                 {
-                    "sample-type": "HEARTRATE",
+                    "sample-type": "0",
                     "recording-rate": 5,
                     "data": [120, 125, 130],
                 },
                 {
-                    "sample-type": "SPEED",
+                    "sample-type": "1",
                     "recording-rate": 1,
                     "data": ["5.5", "6.0"],
                 },
             ]
         )
 
-        hr_sample = samples.get_sample_by_type("HEARTRATE")
+        hr_sample = samples.get_sample_by_type("0")
         assert hr_sample is not None
-        assert hr_sample.sample_type == "HEARTRATE"
+        assert hr_sample.sample_type == "0"
         assert len(hr_sample.values) == 3
 
     def test_get_sample_by_type_not_found(self) -> None:
@@ -449,7 +449,7 @@ class TestExerciseSamples:
         samples = ExerciseSamples(
             samples=[
                 {
-                    "sample-type": "HEARTRATE",
+                    "sample-type": "0",
                     "recording-rate": 5,
                     "data": [120, 125, 130],
                 }
@@ -463,7 +463,7 @@ class TestExerciseSamples:
         """Test empty samples container."""
         samples = ExerciseSamples(samples=[])
         assert len(samples.samples) == 0
-        assert samples.get_sample_by_type("HEARTRATE") is None
+        assert samples.get_sample_by_type("0") is None
 
 
 class TestHeartRateZone:
@@ -509,7 +509,7 @@ class TestHeartRateZone:
         """Test validation fails for invalid zone index."""
         with pytest.raises(ValidationError) as exc_info:
             HeartRateZone(
-                index=0,  # Invalid, must be >= 1
+                index=-1,  # Invalid, must be >= 0
                 lower_limit=100,
                 upper_limit=120,
                 in_zone="PT10M",

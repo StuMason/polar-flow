@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-10-02
+
+### Fixed
+- Exercise detail failed validation on real AccessLink data: `sample-type` arrives as an integer
+  key (`0` heart rate ... `11` RR interval) and heart rate zone `index` is 0-based. `sample_type`
+  is now coerced to a string key and zone `index` accepts 0
+- `ExerciseSample.values` accepts `None` (RR interval samples can contain NULLs per the docs)
+
 ## [1.5.0] - 2026-08-05
 
 ### Added
