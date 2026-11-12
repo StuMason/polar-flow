@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.2] - 2026-11-12
+
+### Fixed
+- `DailyActivitySamples.steps` is now optional (`StepData | None`). AccessLink marks it as not
+  required and omits it on days with no step data, which failed validation (#17)
+
 ## [1.5.1] - 2026-10-02
 
 ### Fixed
