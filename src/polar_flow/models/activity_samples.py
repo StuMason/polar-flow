@@ -36,10 +36,13 @@ class StepData(BaseModel):
 class DailyActivitySamples(BaseModel):
     """Activity samples for a single day.
 
-    Contains minute-by-minute step data.
+    Contains minute-by-minute step data. `steps` is optional in the AccessLink
+    schema and is absent on days with no step data.
     """
 
     model_config = ConfigDict(populate_by_name=True)
 
     date: str = Field(description="Date in YYYY-MM-DD format")
-    steps: StepData = Field(description="Step data for the day")
+    steps: StepData | None = Field(
+        default=None, description="Step data for the day (None when the day has none)"
+    )

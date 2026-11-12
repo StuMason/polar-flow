@@ -46,7 +46,8 @@ class ActivitySamplesEndpoint:
             async with PolarFlow(access_token="token") as client:
                 samples = await client.activity_samples.list(days=3)
                 for day in samples:
-                    print(f"{day.date}: {day.steps.total_steps} total steps")
+                    if day.steps:
+                        print(f"{day.date}: {day.steps.total_steps} total steps")
             ```
         """
         # Determine date range
